@@ -31,16 +31,6 @@ public class Base {
     @Autowired
     private UsersService usersService;
 
-
-
-
-
-
-
-// ==========================
-//      USERS ENDPOINTS
-// ==========================
-
     @GetMapping("/users")
     public ResponseEntity<List<Users>> getAllUsers() {
         return ResponseEntity.ok(usersService.getAllUsers());
@@ -127,10 +117,6 @@ public class Base {
     public ResponseEntity<List<Users.UserNamePointsDTO>> getAllNames() {
         return ResponseEntity.ok(usersService.getAllNames());
     }
-
-
-
-
 
     @GetMapping("/A/abilities")
     public ResponseEntity<List<Abilities>> getAllAbilities() {
@@ -227,6 +213,4 @@ public class Base {
             return ResponseEntity.notFound().build();
         }
     }
-
-
 }

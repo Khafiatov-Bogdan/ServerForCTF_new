@@ -4,7 +4,6 @@ public class RegisterRequest {
     private String login;
     private String password;
 
-    // геттеры и сеттеры
     public String getLogin() { return login; }
     public void setLogin(String login) { this.login = login; }
 

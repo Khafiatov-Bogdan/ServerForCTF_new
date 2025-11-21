@@ -8,7 +8,6 @@ import java.util.concurrent.ConcurrentHashMap;
 @Component
 public class SessionRegistry {
 
-    // sessionId -> username
     private final Map<String, String> sessions = new ConcurrentHashMap<>();
 
     public void registerSession(String sessionId, String username) {

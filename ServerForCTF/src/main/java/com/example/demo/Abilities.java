@@ -25,7 +25,6 @@ public class Abilities {
     @OneToMany(mappedBy = "ability")
     private Set<Mobs_Ability> mobsAbilities = new HashSet<>();
 
-    // Конструкторы
     public Abilities() {}
 
     public Abilities(String name, String stuff) {
@@ -56,6 +55,4 @@ public class Abilities {
     public void setStuff(String stuff) {
         this.stuff = stuff;
     }
-
-
 }

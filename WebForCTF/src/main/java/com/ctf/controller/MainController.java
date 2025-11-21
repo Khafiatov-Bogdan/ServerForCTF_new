@@ -91,7 +91,6 @@ public class MainController {
             Logger logger = LoggerFactory.getLogger(MainController.class);
             logger.info("LOGIN ATTEMPT: username={} sessionID={}", username, session.getId());
 
-            // Формируем тело запроса к API
             Map<String, String> payload = Map.of(
                     "login", username,
                     "password", password
@@ -103,7 +102,6 @@ public class MainController {
             HttpEntity<Map<String, String>> entity = new HttpEntity<>(payload, headers);
             RestTemplate restTemplate = new RestTemplate();
 
-            // Отправляем POST на Spring Security API
             ResponseEntity<String> response = restTemplate.postForEntity(
                     "http://backend:8080/api/auth/login", // backend URL
                     entity,
@@ -111,7 +109,6 @@ public class MainController {
             );
 
             if (response.getStatusCode().is2xxSuccessful()) {
-                // Авторизация успешна
                 session.setAttribute("username", username);
                 session.setAttribute("isAuthenticated", true);
 
@@ -162,18 +159,7 @@ public class MainController {
                 .toList();
     }
 
-
-
-
-
-
-
-
-
-
-
-
-    @PostMapping("/register")
+@PostMapping("/register")
     public String registerUser(
             @RequestParam String username,
             @RequestParam String password,
@@ -275,7 +261,7 @@ public class MainController {
 
     @GetMapping("/debug")
     public String debugPage(Model model) {
-        String backendUrl = "http://backend:8080/debug/public/ping"; // контейнерное имя backend
+        String backendUrl = "http://backend:8080/debug/public/ping"; 
         RestTemplate restTemplate = new RestTemplate();
         String backendResponse;
         try {
@@ -285,7 +271,7 @@ public class MainController {
         }
 
         model.addAttribute("pingResponse", backendResponse);
-        return "debug"; // имя Thymeleaf-шаблона debug.html
+        return "debug"; 
     }
 
 

@@ -14,7 +14,6 @@ public class Character {
     public String archetype;
     public String charnick;
 
-    // Конструкторы, геттеры, сеттеры
     public Character() {}
     public Character(String name, String race, String type, String archetype, String charnick){
         this.name=name;
@@ -26,8 +25,6 @@ public class Character {
     public Long getId() {
         return id;
     }
-
-    // ID не имеет сеттера, так как генерируется автоматически
 
     public interface CharacterIdName {
         Long getId();

@@ -39,7 +39,7 @@ public class AuthController {
             return ResponseEntity.status(401).body("Неверный логин или пароль");
         }
 
-        return ResponseEntity.ok("Успешная авторизация");
+        return ResponseEntity.ok("Успех :)");
     }
 
 }

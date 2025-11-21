@@ -25,9 +25,6 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-
-
-
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
@@ -44,10 +41,10 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/login", "/api/auth/register", "/top3", "/allNames").permitAll() // разрешаем всем
                         .requestMatchers("/debug/**").permitAll()
-                        .anyRequest().authenticated()  // остальное защищаем
+                        .anyRequest().authenticated()  
                 )
 
-                .httpBasic(Customizer.withDefaults()); // заменяем устаревший вызов
+                .httpBasic(Customizer.withDefaults()); 
 
         return http.build();
     }

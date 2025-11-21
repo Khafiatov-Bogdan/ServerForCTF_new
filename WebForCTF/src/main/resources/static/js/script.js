@@ -268,7 +268,7 @@ function generateFullLeaderboard() {
     const fullList = document.getElementById('leaderboardFull');
     if (!fullList) return;
 
-    fetch('http://localhost:8081/allNames') // эндпоинт, который отдаёт UserNamePointsDTO
+    fetch('http://localhost:8081/allNames') 
         .then(response => response.json())
         .then(users => {
             fullList.innerHTML = '';

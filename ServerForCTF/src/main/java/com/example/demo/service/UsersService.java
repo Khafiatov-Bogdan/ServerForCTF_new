@@ -27,8 +27,6 @@ public class UsersService {
         return usersRepository.findAllNames();
     }
 
-
-    /** Регистрация нового пользователя */
     public Users registerUser(String login, String rawPassword) {
         if (usersRepository.existsByLogin(login)) {
             throw new IllegalArgumentException("Пользователь с таким логином уже существует");
@@ -42,24 +40,20 @@ public class UsersService {
         return usersRepository.save(user);
     }
 
-    /** Получить всех пользователей */
     public List<Users> getAllUsers() {
         return usersRepository.findAll();
     }
 
-    /** Найти по логину */
     public Optional<Users> getUserByLogin(String login) {
         return usersRepository.findByLogin(login);
     }
 
-    /** Проверка пароля */
     public boolean checkPassword(String login, String rawPassword) {
         Optional<Users> userOpt = usersRepository.findByLogin(login);
         return userOpt.map(user -> passwordEncoder.matches(rawPassword, user.getPassword()))
                 .orElse(false);
     }
 
-    /** Удаление пользователя */
     public void deleteUser(Long id) {
         usersRepository.deleteById(id);
     }
@@ -76,10 +70,9 @@ public class UsersService {
             user.setLogin(login);
         }
 
-        // обновляем пароль
+
         user.setPassword(passwordEncoder.encode(rawPassword));
 
-        // обновляем points
         user.setPoints(points);
 
         return usersRepository.save(user);
@@ -87,18 +80,15 @@ public class UsersService {
 
 
 
-    // ============================
-    // 🔥 Новые методы для POINTS 🔥
-    // ============================
 
-    /** Получить кол-во очков */
+    /** Получаем кол-во очков */
     public int getPoints(String login) {
         Users user = usersRepository.findByLogin(login)
                 .orElseThrow(() -> new RuntimeException("User not found"));
         return user.getPoints();
     }
 
-    /** Установить рейтинг полностью */
+    /** Рейтинг  */
     public void setPoints(String login, int newPoints) {
         Users user = usersRepository.findByLogin(login)
                 .orElseThrow(() -> new RuntimeException("User not found"));
@@ -106,7 +96,7 @@ public class UsersService {
         usersRepository.save(user);
     }
 
-    /** Добавить очки */
+    /** Добавляем очки */
     public void addPoints(String login, int amount) {
         Users user = usersRepository.findByLogin(login)
                 .orElseThrow(() -> new RuntimeException("User not found"));
@@ -114,7 +104,7 @@ public class UsersService {
         usersRepository.save(user);
     }
 
-    /** Списать очки */
+    /** Списываем очки */
     public void subtractPoints(String login, int amount) {
         Users user = usersRepository.findByLogin(login)
                 .orElseThrow(() -> new RuntimeException("User not found"));

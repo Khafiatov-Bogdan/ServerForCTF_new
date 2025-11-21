@@ -21,7 +21,7 @@ public class AbilitiesService {
 
     @PostConstruct
     public void logConnection() {
-        System.out.println("Spring Boot сервис AbilitiesService запущен!");
+        System.out.println("Spring Boot сервис AbilitiesService запущен");
         abilitiesRepository.findAll().forEach(a ->
                 System.out.println(a.getId() + " " + a.getName() + " " + a.getStuff())
         );

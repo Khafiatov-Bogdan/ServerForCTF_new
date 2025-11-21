@@ -21,7 +21,6 @@ public class Task {
     private Integer points;
     private String difficulty;
     
-    // Конструкторы
     public Task() {}
     
     public Task(Long id, String title, String description, String category, Integer points, String difficulty) {

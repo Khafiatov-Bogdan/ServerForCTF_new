@@ -44,9 +44,6 @@ public class Users {
         public int getPoints() { return points; }
     }
 
-    // ======================
-    // Геттеры и сеттеры
-    // ======================
     public Long getId() { return id; }
 
     public String getLogin() { return login; }
