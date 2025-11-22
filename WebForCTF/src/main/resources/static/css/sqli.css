@@ -1,0 +1,162 @@
+.challenge-body {
+    font-family: Arial, sans-serif;
+    background: #111;
+    color: #0f0;
+    padding: 20px;
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.challenge-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    max-width: 500px;
+}
+
+.login-form {
+    width: 100%;
+    padding: 40px;
+    border: 2px solid #00ff88;
+    border-radius: 15px;
+    background: rgba(0, 255, 136, 0.05);
+    box-sizing: border-box;
+}
+
+.login-form h2 {
+    text-align: center;
+    color: #00ff88;
+    margin-bottom: 15px;
+    font-size: 24px;
+}
+
+.login-form p {
+    text-align: center;
+    margin-bottom: 25px;
+    color: #ccc;
+    font-size: 16px;
+}
+
+.login-form input {
+    width: 100%;
+    padding: 15px;
+    margin: 12px 0;
+    background: #222;
+    border: 1px solid #00ff88;
+    border-radius: 8px;
+    color: #fff;
+    box-sizing: border-box;
+    font-size: 16px;
+}
+
+.login-form input:focus {
+    outline: none;
+    border-color: #00cc6a;
+    box-shadow: 0 0 8px rgba(0, 255, 136, 0.5);
+}
+
+.login-form button {
+    width: 100%;
+    padding: 15px;
+    background: #00ff88;
+    color: #000;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    margin: 15px 0;
+    transition: all 0.3s;
+    font-size: 16px;
+}
+
+.login-form button:hover {
+    background: #00cc6a;
+    transform: translateY(-2px);
+}
+
+.message {
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
+    font-size: 14px;
+}
+
+.message .success {
+    background: rgba(0, 255, 136, 0.2);
+    color: #00ff88;
+    border: 1px solid #00ff88;
+}
+
+.message .error {
+    background: rgba(255, 0, 0, 0.2);
+    color: #ff4444;
+    border: 1px solid #ff4444;
+}
+
+.flag-section {
+    display: none;
+    margin-top: 25px;
+}
+
+.flag-validation {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.flag-validation input {
+    flex: 1;
+    margin: 0;
+}
+
+.flag-validation button {
+    width: auto;
+    min-width: 150px;
+    margin: 0;
+    white-space: nowrap;
+}
+
+/* Анимации */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.login-form {
+    animation: fadeIn 0.5s ease-out;
+}
+
+.flag-section {
+    animation: fadeIn 0.5s ease-out;
+}
+
+/* Адаптивность */
+@media (max-width: 600px) {
+    .challenge-container {
+        max-width: 95%;
+    }
+    
+    .login-form {
+        padding: 30px 25px;
+    }
+    
+    .flag-validation {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .flag-validation button {
+        width: 100%;
+    }
+}
