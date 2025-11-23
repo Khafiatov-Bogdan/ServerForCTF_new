@@ -1,26 +1,104 @@
-.challenge-body {
-    font-family: Arial, sans-serif;
-    background: #111;
-    color: #0f0;
-    padding: 20px;
-    margin: 0;
+/* Контейнер для SQL Injection страницы */
+.container-sqli {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 40px;
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
     min-height: 100vh;
+}
+
+/* Заголовок челленджа вместо верхнего футера */
+.challenge-header {
+    text-align: center;
+    padding: 3rem 0 2rem 0;
+    margin-bottom: 2rem;
+}
+
+.challenge-title {
+    background: rgba(26, 26, 26, 0.8);
+    padding: 2.5rem;
+    border-radius: 20px;
+    border: 2px solid #00ff88;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 10px 40px rgba(0, 255, 136, 0.2);
+}
+
+.challenge-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    filter: drop-shadow(0 0 20px rgba(0, 255, 136, 0.5));
+}
+
+.challenge-title h1 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 2.5rem;
+    background: linear-gradient(45deg, #00ff88, #0088ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 1rem;
+    text-shadow: 0 0 30px rgba(0, 255, 136, 0.5);
+}
+
+.challenge-description {
+    color: #cccccc;
+    font-size: 1.2rem;
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+}
+
+.challenge-meta {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    align-items: center;
+}
+
+.difficulty-badge {
+    padding: 0.5rem 1.2rem;
+    border-radius: 25px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-family: 'Orbitron', sans-serif;
+}
+
+.difficulty-badge.easy {
+    background: rgba(0, 255, 136, 0.2);
+    color: #00ff88;
+    border: 2px solid #00ff88;
+}
+
+.points-badge {
+    background: linear-gradient(135deg, #ffa500, #ff8c00);
+    color: #000;
+    padding: 0.5rem 1.2rem;
+    border-radius: 25px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    font-family: 'Orbitron', sans-serif;
+}
+
+/* Основной контент */
+.challenge-main {
+    flex: 1;
     display: flex;
     align-items: center;
     justify-content: center;
-    /* Запрет выделения текста по умолчанию */
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
+    padding: 2rem 0;
 }
 
+/* Стили для SQL Injection Challenge */
 .challenge-container {
     display: flex;
     justify-content: center;
     align-items: center;
     width: 100%;
     max-width: 500px;
+    margin: 0 auto;
 }
 
 .login-form {
@@ -28,30 +106,18 @@
     padding: 40px;
     border: 2px solid #00ff88;
     border-radius: 15px;
-    background: rgba(0, 255, 136, 0.05);
+    background: rgba(26, 26, 26, 0.9);
     box-sizing: border-box;
-    /* Запрет выделения текста внутри формы */
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    /* Добавляем тень для лучшего визуального эффекта */
-    box-shadow: 0 8px 32px rgba(0, 255, 136, 0.1);
+    box-shadow: 0 8px 32px rgba(0, 255, 136, 0.2);
+    backdrop-filter: blur(10px);
 }
 
-.login-form h2 {
+.login-form h3 {
     text-align: center;
     color: #00ff88;
     margin-bottom: 15px;
     font-size: 24px;
-    /* Запрет выделения заголовка */
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    /* Добавляем отступ слева для лучшего выравнивания */
-    padding-left: 10px;
-    letter-spacing: 0.5px;
+    font-family: 'Orbitron', sans-serif;
 }
 
 .login-form p {
@@ -59,45 +125,38 @@
     margin-bottom: 25px;
     color: #ccc;
     font-size: 16px;
-    /* Запрет выделения текста */
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    /* Добавляем отступ слева */
-    padding-left: 10px;
     line-height: 1.5;
+}
+
+.input-group {
+    margin-bottom: 1rem;
 }
 
 .login-form input {
     width: 100%;
     padding: 15px;
-    margin: 12px 0;
-    background: #222;
+    margin: 8px 0;
+    background: rgba(10, 10, 10, 0.8);
     border: 1px solid #00ff88;
     border-radius: 8px;
     color: #fff;
     box-sizing: border-box;
     font-size: 16px;
-    /* Разрешаем выделение в полях ввода */
-    -webkit-user-select: text;
-    -moz-user-select: text;
-    -ms-user-select: text;
-    user-select: text;
-    /* Добавляем отступ слева для согласованности */
-    padding-left: 15px;
+    font-family: 'Courier New', monospace;
+    transition: all 0.3s ease;
 }
 
 .login-form input:focus {
     outline: none;
     border-color: #00cc6a;
-    box-shadow: 0 0 8px rgba(0, 255, 136, 0.5);
+    box-shadow: 0 0 15px rgba(0, 255, 136, 0.4);
+    background: rgba(15, 15, 15, 0.9);
 }
 
 .login-form button {
     width: 100%;
     padding: 15px;
-    background: #00ff88;
+    background: linear-gradient(135deg, #00ff88, #00cc6a);
     color: #000;
     border: none;
     border-radius: 8px;
@@ -106,16 +165,15 @@
     margin: 15px 0;
     transition: all 0.3s;
     font-size: 16px;
-    /* Запрет выделения текста кнопки */
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
+    font-family: 'Orbitron', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 .login-form button:hover {
-    background: #00cc6a;
+    background: linear-gradient(135deg, #00ff88, #00ffaa);
     transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(0, 255, 136, 0.4);
 }
 
 .message {
@@ -124,14 +182,8 @@
     border-radius: 8px;
     text-align: center;
     font-size: 14px;
-    /* Запрет выделения сообщений по умолчанию */
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    /* Добавляем отступ слева */
-    padding-left: 10px;
-    padding-right: 10px;
+    font-weight: 500;
+    transition: all 0.3s ease;
 }
 
 .message .success {
@@ -141,201 +193,107 @@
 }
 
 .message .error {
-    background: rgba(255, 0, 0, 0.2);
+    background: rgba(255, 0, 136, 0.2);
     color: #ff4444;
     border: 1px solid #ff4444;
 }
 
-/* Секция для кнопки проверки флага */
-.flag-check-section {
+.message .warning {
+    background: rgba(255, 165, 0, 0.2);
+    color: #ffa500;
+    border: 1px solid #ffa500;
+}
+
+.message .info {
+    background: rgba(0, 136, 255, 0.2);
+    color: #0088ff;
+    border: 1px solid #0088ff;
+}
+
+/* Стили для секции подсказок */
+.hint-section {
     margin-top: 20px;
     text-align: center;
-    /* Добавляем отступ слева для согласованности */
-    padding-left: 10px;
 }
 
-.flag-check-btn {
-    width: auto !important;
-    padding: 10px 20px !important;
-    background: rgba(0, 255, 136, 0.2) !important;
-    color: #00ff88 !important;
-    border: 1px solid #00ff88 !important;
-    font-size: 14px !important;
+.hint-button {
+    background: #ffa500;
+    color: #000;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s;
+    margin-bottom: 10px;
+    font-family: 'Orbitron', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
-.flag-check-btn:hover {
-    background: rgba(0, 255, 136, 0.3) !important;
-    transform: translateY(-1px) !important;
+.hint-button:hover {
+    background: #ff8c00;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(255, 165, 0, 0.4);
 }
 
-/* Специальный класс для флага, который можно выделять */
+.hint-content {
+    display: none;
+    padding: 15px;
+    background: rgba(255, 165, 0, 0.1);
+    border: 1px solid #ffa500;
+    border-radius: 8px;
+    color: #ffa500;
+    margin-top: 10px;
+    text-align: left;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.hint-content.show {
+    display: block;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.hint-content strong {
+    color: #ff8c00;
+}
+
+.hint-content code {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-family: 'Courier New', monospace;
+    color: #fff;
+    font-weight: bold;
+}
+
+/* Специальный класс для флага */
 .flag-text {
-    /* Разрешаем выделение флага */
     -webkit-user-select: text;
     -moz-user-select: text;
     -ms-user-select: text;
     user-select: text;
     cursor: text;
     background: rgba(0, 255, 136, 0.1);
-    padding: 8px 12px;
-    border-radius: 4px;
-    margin: 10px 0;
-    border: 1px dashed #00ff88;
-    font-family: monospace;
-    font-weight: bold;
-}
-
-/* Стили для модального окна проверки флага */
-.modal {
-    display: none;
-    position: fixed;
-    z-index: 1000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.8);
-    backdrop-filter: blur(5px);
-}
-
-.modal-content {
-    background: #111;
-    margin: 10% auto;
-    padding: 30px;
-    border: 2px solid #00ff88;
-    border-radius: 15px;
-    width: 90%;
-    max-width: 400px;
-    position: relative;
-    animation: modalFadeIn 0.3s ease-out;
-    box-shadow: 0 8px 32px rgba(0, 255, 136, 0.2);
-}
-
-@keyframes modalFadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(-50px) scale(0.9);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-    }
-}
-
-.modal-content h3 {
-    color: #00ff88;
-    text-align: center;
-    margin-bottom: 20px;
-    font-size: 20px;
-    /* Добавляем отступ слева для согласованности */
-    padding-left: 10px;
-    letter-spacing: 0.5px;
-}
-
-.close {
-    color: #00ff88;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-    cursor: pointer;
-    line-height: 1;
-}
-
-.close:hover {
-    color: #00cc6a;
-}
-
-.flag-check-form {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
-}
-
-.flag-check-form input {
-    flex: 1;
     padding: 12px;
-    background: #222;
-    border: 1px solid #00ff88;
     border-radius: 8px;
-    color: #fff;
-    font-size: 14px;
-    -webkit-user-select: text;
-    -moz-user-select: text;
-    -ms-user-select: text;
-    user-select: text;
-    /* Добавляем отступ слева */
-    padding-left: 15px;
-}
-
-.flag-check-form input:focus {
-    outline: none;
-    border-color: #00cc6a;
-    box-shadow: 0 0 8px rgba(0, 255, 136, 0.5);
-}
-
-.flag-check-form button {
-    padding: 12px 20px;
-    background: #00ff88;
-    color: #000;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
+    margin: 15px 0;
+    border: 1px dashed #00ff88;
+    font-family: 'Courier New', monospace;
     font-weight: bold;
-    white-space: nowrap;
-    transition: all 0.3s;
-}
-
-.flag-check-form button:hover {
-    background: #00cc6a;
-    transform: translateY(-2px);
-}
-
-.flag-check-result {
-    padding: 15px;
-    border-radius: 8px;
+    font-size: 16px;
     text-align: center;
-    font-weight: bold;
-    min-height: 20px;
-    /* Добавляем отступ слева */
-    padding-left: 10px;
-    padding-right: 10px;
 }
 
-.flag-check-result.success {
-    background: rgba(0, 255, 136, 0.2);
-    color: #00ff88;
-    border: 1px solid #00ff88;
-}
-
-.flag-check-result.error {
-    background: rgba(255, 0, 0, 0.2);
-    color: #ff4444;
-    border: 1px solid #ff4444;
-}
-
-/* Стиль для отображения очков */
-.points-badge {
-    display: inline-block;
-    background: linear-gradient(135deg, #00ff88, #00cc6a);
-    color: #000;
-    padding: 4px 12px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: bold;
-    margin-left: 8px;
-    animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-    0% {
-        transform: scale(1);
-    }
-    50% {
-        transform: scale(1.05);
-    }
-    100% {
-        transform: scale(1);
-    }
+/* Футер прикрепленный к низу */
+.footer-sqli {
+    margin-top: auto;
+    padding: 20px 0;
+    text-align: center;
+    border-top: 1px solid rgba(0, 255, 136, 0.2);
+    background: rgba(0, 0, 0, 0.5);
+    color: #cccccc;
 }
 
 /* Анимации */
@@ -350,34 +308,81 @@
     }
 }
 
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
 .login-form {
     animation: fadeIn 0.5s ease-out;
 }
 
 /* Адаптивность */
-@media (max-width: 600px) {
+@media (max-width: 768px) {
+    .container-sqli {
+        padding: 0 20px;
+    }
+
+    .challenge-header {
+        padding: 2rem 0 1rem 0;
+    }
+
+    .challenge-title {
+        padding: 2rem 1.5rem;
+    }
+
+    .challenge-title h1 {
+        font-size: 2rem;
+    }
+
+    .challenge-description {
+        font-size: 1.1rem;
+    }
+
+    .challenge-meta {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
     .challenge-container {
         max-width: 95%;
     }
-    
+
     .login-form {
         padding: 30px 25px;
     }
-    
-    .flag-check-form {
-        flex-direction: column;
+
+    .login-form h3 {
+        font-size: 20px;
     }
-    
-    .modal-content {
-        margin: 20% auto;
-        width: 85%;
-        padding: 20px;
+
+    .hint-button {
+        padding: 10px 20px;
+        font-size: 14px;
     }
-    
-    .login-form h2,
-    .login-form p,
-    .message,
-    .flag-check-section {
-        padding-left: 5px;
+}
+
+@media (max-width: 480px) {
+    .challenge-title {
+        padding: 1.5rem 1rem;
+    }
+
+    .challenge-title h1 {
+        font-size: 1.7rem;
+    }
+
+    .challenge-icon {
+        font-size: 3rem;
+    }
+
+    .login-form {
+        padding: 25px 20px;
     }
 }

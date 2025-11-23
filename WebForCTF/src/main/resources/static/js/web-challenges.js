@@ -6,11 +6,11 @@
 // Глобальные переменные для управления состоянием
 let currentChallenge = null;
 const challengeFlags = {
-    'sqli': 'flag{sql_injection_success}',
-    'xss': 'flag{xss_successful}',
-    'auth': 'flag{auth_bypass_success}',
-    'path': 'flag{path_traversal_success}',
-    'csrf': 'flag{csrf_attack_success}'
+    'sqli': 'flag{sql_injection_success_2024}',
+    'xss': 'flag{xss_successful_2024}',
+    'auth': 'flag{auth_bypass_success_2024}',
+    'path': 'flag{path_traversal_success_2024}',
+    'csrf': 'flag{csrf_attack_success_2024}'
 };
 
 // Инициализация при загрузке DOM
@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeChallengeModals();
     initializeTaskFilters();
     initializeHints();
-    ensureFooterPosition(); // Гарантируем правильное положение футера
+    ensureFooterPosition();
 });
 
 // Инициализация модальных окон
@@ -111,156 +111,100 @@ function ensureFooterPosition() {
         if (containerHeight < windowHeight) {
             footer.style.marginTop = 'auto';
         } else {
-            footer.style.marginTop = '40px'; // Нормальный отступ когда контента много
+            footer.style.marginTop = '40px';
         }
     }
 }
 
 // Инициализация системы подсказок
 function initializeHints() {
+    console.log('Initializing hints system...');
+
+    // Сначала скрываем все подсказки
+    document.querySelectorAll('.task-hint').forEach(hint => {
+        hint.style.display = 'none';
+    });
+
     // Добавляем обработчики для всех кнопок подсказок
     const hintButtons = document.querySelectorAll('.hint-btn');
+
     hintButtons.forEach(button => {
-        const challengeType = button.getAttribute('onclick').match(/showHint\('(.+?)'\)/)[1];
-        button.setAttribute('data-hint', challengeType);
-        button.addEventListener('click', function() {
-            showHint(challengeType);
+        // Убираем старый обработчик onclick если есть
+        button.removeAttribute('onclick');
+
+        // Добавляем новый обработчик
+        button.addEventListener('click', function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            // Находим ID подсказки из data-атрибута
+            const hintId = this.getAttribute('data-hint-id');
+            console.log('Hint button clicked, hintId:', hintId);
+
+            if (hintId) {
+                toggleHint(hintId, this);
+            } else {
+                console.error('No data-hint-id attribute found on hint button');
+            }
         });
+
+        console.log(`Hint button initialized: ${button.getAttribute('data-hint-id')}`);
     });
+    
+    console.log(`Initialized ${hintButtons.length} hint buttons`);
+}
+
+// Функция переключения подсказки
+function toggleHint(hintId, button) {
+    const hintElement = document.getElementById(hintId);
+    
+    if (!hintElement) {
+        console.error('Hint element not found:', hintId);
+        return;
+    }
+    
+    const isVisible = hintElement.style.display === 'block';
+    
+    if (!isVisible) {
+        // Показываем подсказку
+        hintElement.style.display = 'block';
+        button.textContent = 'Hide Hint';
+        button.classList.add('active');
+        
+        // Плавное появление
+        hintElement.style.opacity = '0';
+        hintElement.style.transform = 'translateY(-10px)';
+        hintElement.style.transition = 'all 0.3s ease';
+        
+        setTimeout(() => {
+            hintElement.style.opacity = '1';
+            hintElement.style.transform = 'translateY(0)';
+        }, 10);
+        
+        // Логируем использование подсказки
+        logHintUsage(hintId);
+    } else {
+        // Скрываем подсказку
+        hintElement.style.opacity = '0';
+        hintElement.style.transform = 'translateY(-10px)';
+        
+        setTimeout(() => {
+            hintElement.style.display = 'none';
+            button.textContent = 'Show Hint';
+            button.classList.remove('active');
+        }, 300);
+    }
 }
 
 // Функции для работы с заданиями
 function openChallenge(challengeType) {
-    const modal = document.getElementById('challengeModal');
-    const content = document.getElementById('challengeContent');
+    console.log('Opening challenge:', challengeType);
     
-    currentChallenge = challengeType;
-    
-    // Загружаем соответствующее задание
-    let challengeHTML = '';
-    
-    switch(challengeType) {
-        case 'sqli':
-            challengeHTML = getSQLiChallenge();
-            break;
-        case 'xss':
-            challengeHTML = getXSSChallenge();
-            break;
-        case 'auth':
-            challengeHTML = getAuthChallenge();
-            break;
-        case 'path':
-            challengeHTML = getPathChallenge();
-            break;
-        case 'csrf':
-            challengeHTML = getCSRFChallenge();
-            break;
-        default:
-            challengeHTML = '<p>Challenge not found</p>';
-    }
-    
-    content.innerHTML = challengeHTML;
-    modal.style.display = 'block';
-    
-    // Логируем открытие задания
-    console.log(`Challenge opened: ${challengeType}`);
+    // Редирект на страницу задания
+    window.location.href = `/challenges/${challengeType}`;
 }
 
-function showHint(hintId) {
-    const hint = document.getElementById(hintId);
-    if (hint) {
-        if (hint.style.display === 'none' || !hint.style.display) {
-            hint.style.display = 'block';
-            hint.style.animation = 'challengeFadeIn 0.3s ease-out';
-            console.log(`Hint shown: ${hintId}`);
-        } else {
-            hint.style.display = 'none';
-        }
-    }
-}
-
-function getSQLiChallenge() {
-    return `
-        <h2>SQL Injection Challenge</h2>
-        <p>Войдите в систему как администратор, используя SQL инъекцию</p>
-        
-        <div class="challenge-frame" id="sqliFrame">
-            <iframe src="/challenges/sqli" style="width:100%; height:100%; border:none;"></iframe>
-        </div>
-        
-        <div id="sqliResult"></div>
-    `;
-}
-
-function getXSSChallenge() {
-    return `
-        <h2>XSS Challenge</h2>
-        <p>Внедрите XSS скрипт, который выполнится на странице</p>
-        
-        <div class="challenge-frame" id="xssFrame">
-            <iframe src="/challenges/xss" style="width:100%; height:100%; border:none;"></iframe>
-        </div>
-        
-        <div class="challenge-controls">
-            <input type="text" class="flag-input" id="xssFlag" placeholder="Введите флаг">
-            <button class="challenge-btn" onclick="checkFlag('xss')">Submit Flag</button>
-        </div>
-        <div id="xssResult"></div>
-    `;
-}
-
-function getAuthChallenge() {
-    return `
-        <h2>Authentication Bypass Challenge</h2>
-        <p>Обойдите аутентификацию и получите доступ к защищенной странице</p>
-        
-        <div class="challenge-frame" id="authFrame">
-            <iframe src="/challenges/auth" style="width:100%; height:100%; border:none;"></iframe>
-        </div>
-        
-        <div class="challenge-controls">
-            <input type="text" class="flag-input" id="authFlag" placeholder="Введите флаг">
-            <button class="challenge-btn" onclick="checkFlag('auth')">Submit Flag</button>
-        </div>
-        <div id="authResult"></div>
-    `;
-}
-
-function getPathChallenge() {
-    return `
-        <h2>Path Traversal Challenge</h2>
-        <p>Используйте уязвимость Path Traversal для чтения файла /flag.txt</p>
-        
-        <div class="challenge-frame" id="pathFrame">
-            <iframe src="/challenges/path" style="width:100%; height:100%; border:none;"></iframe>
-        </div>
-        
-        <div class="challenge-controls">
-            <input type="text" class="flag-input" id="pathFlag" placeholder="Введите флаг">
-            <button class="challenge-btn" onclick="checkFlag('path')">Submit Flag</button>
-        </div>
-        <div id="pathResult"></div>
-    `;
-}
-
-function getCSRFChallenge() {
-    return `
-        <h2>CSRF Challenge</h2>
-        <p>Создайте CSRF атаку для изменения email администратора</p>
-        
-        <div class="challenge-frame" id="csrfFrame">
-            <iframe src="/challenges/csrf" style="width:100%; height:100%; border:none;"></iframe>
-        </div>
-        
-        <div class="challenge-controls">
-            <input type="text" class="flag-input" id="csrfFlag" placeholder="Введите флаг">
-            <button class="challenge-btn" onclick="checkFlag('csrf')">Submit Flag</button>
-        </div>
-        <div id="csrfResult"></div>
-    `;
-}
-
-// Функция проверки флага
+// Функция проверки флага (для модальных окон если используются)
 function checkFlag(challengeType) {
     const flagInput = document.getElementById(`${challengeType}Flag`);
     const resultDiv = document.getElementById(`${challengeType}Result`);
@@ -280,7 +224,6 @@ function checkFlag(challengeType) {
         // Логируем успешное решение
         console.log(`Challenge ${challengeType} solved with flag: ${userFlag}`);
         
-        // Можно добавить отправку на сервер здесь
         submitFlagToServer(challengeType, userFlag);
     } else {
         resultDiv.innerHTML = '<p class="error-message">❌ Неверный флаг. Попробуйте еще раз.</p>';
@@ -292,11 +235,30 @@ function checkFlag(challengeType) {
 
 // Заглушка для отправки флага на сервер
 function submitFlagToServer(challengeType, flag) {
-    // В реальной системе здесь был бы fetch запрос к серверу
     console.log(`Submitting flag to server: ${challengeType} - ${flag}`);
 }
 
-// Обработчик изменения размера окна для корректного положения футера
+// Логирование использования подсказок
+function logHintUsage(hintId) {
+    console.log(`Hint used: ${hintId}`);
+    
+    // Можно отправить на сервер для статистики
+    fetch('/api/hint/used', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            hintId: hintId,
+            timestamp: new Date().toISOString(),
+            page: 'web'
+        })
+    }).catch(error => {
+        console.log('Hint logging failed (might be offline)');
+    });
+}
+
+// Обработчик изменения размера окна
 window.addEventListener('resize', debounce(ensureFooterPosition, 250));
 
 // Утилиты
@@ -312,6 +274,46 @@ function debounce(func, wait) {
     };
 }
 
+// Добавляем CSS для подсказок если его нет
+const hintStyles = document.createElement('style');
+hintStyles.textContent = `
+    .task-hint {
+        background: rgba(255, 165, 0, 0.1);
+        border: 1px solid #ffa500;
+        border-radius: 8px;
+        padding: 15px;
+        margin-top: 10px;
+        color: #ffa500;
+        display: none;
+    }
+    
+    .task-hint strong {
+        color: #ff8c00;
+    }
+    
+    .hint-btn.active {
+        background: #ffa500 !important;
+        color: #000 !important;
+        border-color: #ffa500 !important;
+    }
+    
+    .task-hint {
+        transition: all 0.3s ease;
+    }
+    
+    @keyframes challengeFadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+`;
+document.head.appendChild(hintStyles);
+
 // Экспорт для тестирования
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = {
@@ -319,6 +321,8 @@ if (typeof module !== 'undefined' && module.exports) {
         filterTasks,
         checkFlag,
         challengeFlags,
-        ensureFooterPosition
+        ensureFooterPosition,
+        toggleHint,
+        initializeHints
     };
 }

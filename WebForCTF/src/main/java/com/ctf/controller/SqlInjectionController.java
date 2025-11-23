@@ -70,4 +70,12 @@ public class SqlInjectionController {
             return "{\"success\": false, \"message\": \"❌ Неверный флаг. Попробуйте еще раз.\"}";
         }
     }
+
+    @GetMapping("/hint")
+    @ResponseBody
+    public String getHint() {
+        return challengeService.getChallengeByTitle("SQL Injection Basic")
+                .map(challenge -> "{\"hint\": \"" + challenge.getHints() + "\"}")
+                .orElse("{\"hint\": \"Подсказка не найдена\"}");
+    }
 }

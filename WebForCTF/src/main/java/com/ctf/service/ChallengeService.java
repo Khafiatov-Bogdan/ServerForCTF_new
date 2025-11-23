@@ -30,27 +30,30 @@ public class ChallengeService {
         return challengeRepository.findByTitle(title);
     }
     
-    // Уязвимый метод для SQL инъекции задания
     public boolean validateSqlInjection(String username, String password) {
-        // Эмуляция уязвимой логики аутентификации
-        String[] sqlInjectionPatterns = {
-            "' OR '1'='1", "' OR 1=1--", "' OR 'a'='a",
-            "admin'--", "' OR ''='", "' OR '1'='1'--",
-            "' UNION SELECT", "';", "\" OR \"1\"=\"1"
-        };
-        
-        String userInput = (username + " " + password).toUpperCase();
-        
-        for (String pattern : sqlInjectionPatterns) {
-            if (userInput.contains(pattern.toUpperCase())) {
-                System.out.println("SQL Injection detected: " + pattern);
-                return true;
-            }
+    // Нормализуем пробелы
+    String normalizedInput = (username + " " + password)
+        .replaceAll("\\s+", " ")
+        .toUpperCase()
+        .trim();
+    
+    // Проверяем различные варианты с разными пробелами
+    String[] patterns = {
+        "' OR '1'='1", "' OR '1' = '1", "' OR '1' = '1",
+        "' OR 1=1", "' OR 1 = 1", "ADMIN' --",
+        "' OR 'A'='A", "' OR ''='"
+    };
+    
+    for (String pattern : patterns) {
+        String normalizedPattern = pattern.replaceAll("\\s+", " ");
+        if (normalizedInput.contains(normalizedPattern.toUpperCase())) {
+            System.out.println("SQL Injection detected: " + pattern);
+            return true;
         }
-        
-        // Также разрешаем обычный вход для тестирования
-        return "admin".equals(username) && "admin123".equals(password);
     }
+    
+    return "admin".equals(username) && "admin123".equals(password);
+}
     
     public boolean validateFlag(Long challengeId, String userFlag) {
         Optional<Challenge> challenge = challengeRepository.findById(challengeId);
@@ -65,4 +68,10 @@ public class ChallengeService {
     public Challenge saveChallenge(Challenge challenge) {
         return challengeRepository.save(challenge);
     }
+
+    public String getChallengeHint(String challengeName) {
+    return getChallengeByTitle(challengeName)
+        .map(Challenge::getHints)
+        .orElse("Подсказка не найдена");
+}
 }

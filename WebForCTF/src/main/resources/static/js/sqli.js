@@ -2,17 +2,15 @@
  * SQL Injection Challenge JavaScript
  */
 
-let challengePoints = 100; // Очки за задание по умолчанию
+let challengePoints = 100;
 
 document.addEventListener('DOMContentLoaded', function() {
     console.log('SQL Injection Challenge initialized');
     initializeLoginForm();
-    initializeFlagCheckModal();
     loadChallengePoints();
 });
 
 function loadChallengePoints() {
-    // Загружаем информацию о задании, включая очки
     fetch('/challenges/sqli/info')
         .then(response => response.json())
         .then(data => {
@@ -36,103 +34,33 @@ function initializeLoginForm() {
     }
 }
 
-function initializeFlagCheckModal() {
-    // Закрытие модального окна при клике вне его
-    const modal = document.getElementById('flagCheckModal');
-    window.addEventListener('click', function(event) {
-        if (event.target === modal) {
-            closeFlagCheckModal();
-        }
-    });
-
-    // Обработка нажатия Enter в поле ввода флага
-    const flagInput = document.getElementById('flagInput');
-    if (flagInput) {
-        flagInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                validateFlag();
-            }
-        });
+function toggleHint() {
+    const hintContent = document.getElementById('hintContent');
+    const hintButton = document.querySelector('.hint-button');
+    
+    if (hintContent.classList.contains('show')) {
+        hintContent.classList.remove('show');
+        hintButton.textContent = 'Show Hint';
+    } else {
+        hintContent.classList.add('show');
+        hintButton.textContent = 'Hide Hint';
+        logHintUsage();
     }
-}
-
-function openFlagCheckModal() {
-    const modal = document.getElementById('flagCheckModal');
-    const flagInput = document.getElementById('flagInput');
-    const resultDiv = document.getElementById('flagCheckResult');
-    
-    // Сбрасываем состояние
-    flagInput.value = '';
-    resultDiv.innerHTML = '';
-    resultDiv.className = 'flag-check-result';
-    
-    // Показываем модальное окно
-    modal.style.display = 'block';
-    
-    // Фокусируемся на поле ввода
-    setTimeout(() => {
-        flagInput.focus();
-    }, 100);
-}
-
-function closeFlagCheckModal() {
-    const modal = document.getElementById('flagCheckModal');
-    modal.style.display = 'none';
-}
-
-function validateFlag() {
-    const flagInput = document.getElementById('flagInput');
-    const resultDiv = document.getElementById('flagCheckResult');
-    const userFlag = flagInput.value.trim();
-
-    if (!userFlag) {
-        resultDiv.innerHTML = '❌ Введите флаг для проверки';
-        resultDiv.className = 'flag-check-result error';
-        return;
-    }
-
-    // Показываем загрузку
-    resultDiv.innerHTML = '🔍 Проверяем флаг...';
-    resultDiv.className = 'flag-check-result';
-
-    // Отправляем запрос на сервер для проверки флага
-    fetch('/challenges/sqli/validate', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: `flag=${encodeURIComponent(userFlag)}`
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        return response.json();
-    })
-    .then(data => {
-        if (data.success) {
-            resultDiv.innerHTML = `✅ Правильно! Флаг принят.<br><span class="points-badge">+${challengePoints} pts</span>`;
-            resultDiv.className = 'flag-check-result success';
-            celebrateFlagSuccess();
-        } else {
-            resultDiv.innerHTML = '❌ Неверный флаг. Попробуйте еще раз.';
-            resultDiv.className = 'flag-check-result error';
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        resultDiv.innerHTML = '⚠️ Ошибка проверки флага';
-        resultDiv.className = 'flag-check-result error';
-    });
 }
 
 function handleLogin() {
-    const username = document.getElementById('username').value;
+    const username = document.getElementById('username').value.trim();
     const password = document.getElementById('password').value;
     const messageDiv = document.getElementById('message');
     
+    // Валидация пустых полей
+    if (!username || !password) {
+        showMessage('⚠️ Пожалуйста, заполните все поля', 'warning');
+        return;
+    }
+    
     // Показываем загрузку
-    messageDiv.innerHTML = '<div class="success">🔐 Проверяем credentials...</div>';
+    showMessage('🔐 Проверяем credentials...', 'info');
     
     fetch('/challenges/sqli/login', {
         method: 'POST',
@@ -149,40 +77,59 @@ function handleLogin() {
     })
     .then(data => {
         if (data.success) {
-            // Автоматически показываем флаг при успешной SQL инъекции
-            messageDiv.innerHTML = `
-                <div class="success">
-                    ✅ ${data.message}<br><br>
-                    🎉 Задание выполнено!<br>
-                    <strong>Флаг:</strong> 
-                    <div class="flag-text">${data.flag}</div>
-                </div>
-            `;
+            // Успешная SQL инъекция
+            showMessage(`
+                ✅ ${data.message}<br><br>
+                🎉 Задание выполнено!<br>
+                <strong>Флаг:</strong> 
+                <div class="flag-text">${data.flag}</div>
+                <div class="points-badge">+${challengePoints} очков</div>
+            `, 'success');
             celebrateSuccess();
             logSuccess(username);
+            
+            // Автоматически проверяем флаг
+            validateFlagAutomatically(data.flag);
         } else {
-            messageDiv.innerHTML = `<div class="error">❌ ${data.message}</div>`;
+            // Неверные данные
+            showMessage(`❌ ${data.message}<br><br>💡 Попробуйте использовать SQL инъекцию`, 'error');
             logFailedAttempt(username);
         }
     })
     .catch(error => {
         console.error('Error:', error);
-        messageDiv.innerHTML = '<div class="error">⚠️ Ошибка соединения с сервером</div>';
+        showMessage('⚠️ Ошибка соединения с сервером. Попробуйте еще раз.', 'error');
     });
 }
 
-function celebrateFlagSuccess() {
-    // Анимация успеха для флага
-    createConfetti();
+function showMessage(message, type = 'info') {
+    const messageDiv = document.getElementById('message');
+    messageDiv.innerHTML = `<div class="${type}">${message}</div>`;
     
-    // Автоматически закрываем окно через 3 секунды
-    setTimeout(() => {
-        closeFlagCheckModal();
-    }, 3000);
+    // Добавляем анимацию
+    messageDiv.style.animation = 'fadeIn 0.3s ease-out';
+}
+
+function validateFlagAutomatically(flag) {
+    fetch('/challenges/sqli/validate', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: `flag=${encodeURIComponent(flag)}`
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            console.log('Flag automatically validated successfully');
+        }
+    })
+    .catch(error => {
+        console.error('Error auto-validating flag:', error);
+    });
 }
 
 function celebrateSuccess() {
-    // Анимация успеха для всего контейнера
     const loginForm = document.querySelector('.login-form');
     loginForm.classList.add('celebrate');
     
@@ -190,7 +137,6 @@ function celebrateSuccess() {
         loginForm.classList.remove('celebrate');
     }, 500);
     
-    // Запускаем конфетти
     createConfetti();
 }
 
@@ -230,6 +176,10 @@ function logFailedAttempt(username) {
     console.log(`Failed login attempt: ${username}`);
 }
 
+function logHintUsage() {
+    console.log('Hint used for SQL Injection challenge');
+}
+
 // Добавляем стили для конфетти
 const confettiStyles = document.createElement('style');
 confettiStyles.textContent = `
@@ -243,15 +193,11 @@ confettiStyles.textContent = `
             opacity: 0;
         }
     }
+    
+    .message .info {
+        background: rgba(0, 136, 255, 0.2);
+        color: #0088ff;
+        border: 1px solid #0088ff;
+    }
 `;
 document.head.appendChild(confettiStyles);
-
-// Экспорт для тестирования
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = {
-        handleLogin,
-        validateFlag,
-        openFlagCheckModal,
-        closeFlagCheckModal
-    };
-}

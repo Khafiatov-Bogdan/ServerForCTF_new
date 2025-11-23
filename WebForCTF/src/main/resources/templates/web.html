@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Web Challenges - CTF Platform</title>
     <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/categories.css">
+    <link rel="stylesheet" href="/static/css/challenges.css">
     <link rel="stylesheet" href="/static/css/web-challenges.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
 </head>
@@ -64,13 +66,13 @@
                         </div>
                         <div class="task-description">
                             <p>Обойдите аутентификацию с помощью SQL инъекции. Найдите флаг в базе данных.</p>
-                            <div class="task-hint" id="sqli-hint" style="display: none;">
+                            <div class="task-hint" id="sqli-hint">
                                 <strong>Hint:</strong> Попробуйте использовать ' OR '1'='1 в поле логина
                             </div>
                         </div>
                         <div class="task-actions">
                             <button class="task-btn" onclick="openChallenge('sqli')">Start Challenge</button>
-                            <button class="task-btn hint-btn" onclick="showHint('sqli-hint')">Show Hint</button>
+                            <button class="task-btn hint-btn" data-hint-id="sqli-hint">Show Hint</button>
                         </div>
                     </div>
 
@@ -81,13 +83,13 @@
                         </div>
                         <div class="task-description">
                             <p>Внедрите XSS скрипт, который выполнится при загрузке страницы.</p>
-                            <div class="task-hint" id="xss-hint" style="display: none;">
+                            <div class="task-hint" id="xss-hint">
                                 <strong>Hint:</strong> Используйте &lt;script&gt;alert('XSS')&lt;/script&gt;
                             </div>
                         </div>
                         <div class="task-actions">
                             <button class="task-btn" onclick="openChallenge('xss')">Start Challenge</button>
-                            <button class="task-btn hint-btn" onclick="showHint('xss-hint')">Show Hint</button>
+                            <button class="task-btn hint-btn" data-hint-id="xss-hint">Show Hint</button>
                         </div>
                     </div>
 
@@ -98,13 +100,13 @@
                         </div>
                         <div class="task-description">
                             <p>Найдите способ обойти аутентификацию и получить доступ к защищенной странице.</p>
-                            <div class="task-hint" id="auth-hint" style="display: none;">
+                            <div class="task-hint" id="auth-hint">
                                 <strong>Hint:</strong> Проверьте cookies или параметры URL
                             </div>
                         </div>
                         <div class="task-actions">
                             <button class="task-btn" onclick="openChallenge('auth')">Start Challenge</button>
-                            <button class="task-btn hint-btn" onclick="showHint('auth-hint')">Show Hint</button>
+                            <button class="task-btn hint-btn" data-hint-id="auth-hint">Show Hint</button>
                         </div>
                     </div>
 
@@ -115,13 +117,13 @@
                         </div>
                         <div class="task-description">
                             <p>Используйте уязвимость Path Traversal для чтения защищенных файлов.</p>
-                            <div class="task-hint" id="path-hint" style="display: none;">
+                            <div class="task-hint" id="path-hint">
                                 <strong>Hint:</strong> Используйте ../ для перемещения по директориям
                             </div>
                         </div>
                         <div class="task-actions">
                             <button class="task-btn" onclick="openChallenge('path')">Start Challenge</button>
-                            <button class="task-btn hint-btn" onclick="showHint('path-hint')">Show Hint</button>
+                            <button class="task-btn hint-btn" data-hint-id="path-hint">Show Hint</button>
                         </div>
                     </div>
 
@@ -132,13 +134,13 @@
                         </div>
                         <div class="task-description">
                             <p>Создайте CSRF атаку для изменения данных пользователя.</p>
-                            <div class="task-hint" id="csrf-hint" style="display: none;">
+                            <div class="task-hint" id="csrf-hint">
                                 <strong>Hint:</strong> Создайте форму, которая автоматически отправляется
                             </div>
                         </div>
                         <div class="task-actions">
                             <button class="task-btn" onclick="openChallenge('csrf')">Start Challenge</button>
-                            <button class="task-btn hint-btn" onclick="showHint('csrf-hint')">Show Hint</button>
+                            <button class="task-btn hint-btn" data-hint-id="csrf-hint">Show Hint</button>
                         </div>
                     </div>
                 </div>
