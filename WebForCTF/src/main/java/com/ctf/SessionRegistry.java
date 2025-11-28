@@ -1,4 +1,4 @@
-package com.ctf.session;
+package com.ctf;
 
 import org.springframework.stereotype.Component;
 

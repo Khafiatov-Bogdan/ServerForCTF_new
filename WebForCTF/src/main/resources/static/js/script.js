@@ -47,8 +47,8 @@ function generateTop3Leaderboard() {
                 leaderItem.innerHTML = `
                     <div class="leader-rank">${index + 1}</div>
                     <div class="leader-info">
-                        <div class="leader-name">${user.username}</div>
-                        <div class="leader-stats">${user.score || 0} pts</div>
+                        <div class="leader-name">${user.name}</div>
+                        <div class="leader-stats">${user.points || 0} pts</div>
                     </div>
                 `;
 

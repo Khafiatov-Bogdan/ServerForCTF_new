@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,11 +14,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import java.util.Base64;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @Controller
 public class MainController {
@@ -28,9 +24,14 @@ public class MainController {
     private UserService userService;
 
     @Autowired
-    private com.ctf.session.SessionRegistry sessionRegistry;
+    private com.ctf.SessionRegistry sessionRegistry;
+
+    private static final Logger logger = LoggerFactory.getLogger(MainController.class);
 
 
+    // ==============================
+    // HOME PAGE
+    // ==============================
     @GetMapping("/")
     public String home(Model model, HttpSession session) {
         Boolean isAuthenticated = (Boolean) session.getAttribute("isAuthenticated");
@@ -42,6 +43,10 @@ public class MainController {
         return "index";
     }
 
+
+    // ==============================
+    // TOP-3 API
+    // ==============================
     @GetMapping("/top3")
     @ResponseBody
     public List<Map<String, Object>> getTop3() {
@@ -50,8 +55,7 @@ public class MainController {
         try {
             RestTemplate rest = new RestTemplate();
             ResponseEntity<List> response = rest.getForEntity(backendUrl, List.class);
-
-            return response.getBody(); // JSON → JS
+            return response.getBody();
         } catch (Exception e) {
             return List.of(
                     Map.of("login", "ERROR", "points", 0)
@@ -60,6 +64,9 @@ public class MainController {
     }
 
 
+    // ==============================
+    // AUTH PAGE
+    // ==============================
     @GetMapping("/auth")
     public String authPage(@RequestParam(value = "register", required = false) String register,
                            @RequestParam(value = "error", required = false) String error,
@@ -72,23 +79,23 @@ public class MainController {
     }
 
 
-    private static final Logger logger = LoggerFactory.getLogger(MainController.class);
-
+    // ==============================
+    // LOGIN
+    // ==============================
     @PostMapping("/login")
     public String loginUser(
             @RequestParam String username,
             @RequestParam String password,
             HttpSession session,
             Model model) {
+
         if (sessionRegistry.isUserActive(username)) {
             model.addAttribute("error", "Пользователь уже вошёл в систему в другой сессии");
             model.addAttribute("isLogin", true);
             return "auth";
         }
+
         try {
-
-
-            Logger logger = LoggerFactory.getLogger(MainController.class);
             logger.info("LOGIN ATTEMPT: username={} sessionID={}", username, session.getId());
 
             Map<String, String> payload = Map.of(
@@ -103,44 +110,38 @@ public class MainController {
             RestTemplate restTemplate = new RestTemplate();
 
             ResponseEntity<String> response = restTemplate.postForEntity(
-                    "http://backend:8080/api/auth/login", // backend URL
+                    "http://backend:8080/api/auth/login",
                     entity,
                     String.class
             );
 
             if (response.getStatusCode().is2xxSuccessful()) {
+
                 session.setAttribute("username", username);
                 session.setAttribute("isAuthenticated", true);
 
                 sessionRegistry.registerSession(session.getId(), username);
-                logger.info("SESSION REGISTERED: {} -> {}", session.getId(), username);
-
 
                 logger.info("LOGIN SUCCESS: username={} sessionID={}", username, session.getId());
-                logger.info("SESSION ATTRIBUTES: username={}, isAuthenticated={}",
-                        session.getAttribute("username"),
-                        session.getAttribute("isAuthenticated"));
+
+                // 🔥 ДОБАВЛЕНО ИЗ ПЕРВОГО ФАЙЛА
+                if ("admin".equalsIgnoreCase(username)) {
+                    return "redirect:/admin-users.html";
+                }
 
                 return "redirect:/";
             } else {
-                logger.warn("LOGIN FAILED: username={} sessionID={} status={}",
-                        username, session.getId(), response.getStatusCode());
                 model.addAttribute("error", "Неверный логин или пароль");
                 model.addAttribute("isLogin", true);
                 return "auth";
             }
 
         } catch (HttpClientErrorException.Unauthorized e) {
-            Logger logger = LoggerFactory.getLogger(MainController.class);
-            logger.warn("LOGIN FAILED: username={} reason=401 Unauthorized sessionID={}",
-                    username, session.getId());
             model.addAttribute("error", "Неверный логин или пароль");
             model.addAttribute("isLogin", true);
             return "auth";
+
         } catch (Exception e) {
-            Logger logger = LoggerFactory.getLogger(MainController.class);
-            logger.error("LOGIN ERROR: username={} exception={} sessionID={}",
-                    username, e.getMessage(), session.getId());
             model.addAttribute("error", "Ошибка при входе: " + e.getMessage());
             model.addAttribute("isLogin", true);
             return "auth";
@@ -148,6 +149,25 @@ public class MainController {
     }
 
 
+    // ==============================
+    // ADMIN PAGE (ДОБАВЛЕНО)
+    // ==============================
+    @GetMapping("/admin-users.html")
+    public String adminUsers(HttpSession session, Model model) {
+        String username = (String) session.getAttribute("username");
+
+        if (username == null || !"admin".equalsIgnoreCase(username)) {
+            return "redirect:/auth";
+        }
+
+        model.addAttribute("currentUser", username);
+        return "admin-users";
+    }
+
+
+    // ==============================
+    // ACTIVE SESSIONS API
+    // ==============================
     @GetMapping("/api/sessions")
     @ResponseBody
     public List<Map<String, String>> getActiveSessions() {
@@ -159,7 +179,11 @@ public class MainController {
                 .toList();
     }
 
-@PostMapping("/register")
+
+    // ==============================
+    // REGISTER
+    // ==============================
+    @PostMapping("/register")
     public String registerUser(
             @RequestParam String username,
             @RequestParam String password,
@@ -169,7 +193,6 @@ public class MainController {
             Model model) {
 
         try {
-
             if (username == null || username.trim().isEmpty()) {
                 model.addAttribute("error", "Имя пользователя обязательно");
                 return showRegisterForm(model);
@@ -185,21 +208,17 @@ public class MainController {
                 return showRegisterForm(model);
             }
 
-
             if (!password.equals(confirmPassword)) {
                 model.addAttribute("error", "Пароли не совпадают");
                 return showRegisterForm(model);
             }
-
 
             if (password.length() < 6) {
                 model.addAttribute("error", "Пароль должен содержать минимум 6 символов");
                 return showRegisterForm(model);
             }
 
-
             User user = userService.registerUser(username.trim(), password, email.trim());
-
 
             session.setAttribute("user", user);
             session.setAttribute("username", user.getUsername());
@@ -207,12 +226,10 @@ public class MainController {
             return "redirect:/?registration=success";
 
         } catch (RuntimeException e) {
-
             model.addAttribute("error", e.getMessage());
             return showRegisterForm(model);
         }
     }
-
 
     private String showRegisterForm(Model model) {
         model.addAttribute("isLogin", false);
@@ -220,6 +237,9 @@ public class MainController {
     }
 
 
+    // ==============================
+    // CHECK USERNAME/EMAIL
+    // ==============================
     @GetMapping("/check-username")
     @ResponseBody
     public String checkUsername(@RequestParam String username) {
@@ -240,6 +260,9 @@ public class MainController {
     }
 
 
+    // ==============================
+    // USERS LIST
+    // ==============================
     @GetMapping("/users")
     public String showUsers(Model model, HttpSession session) {
         User currentUser = (User) session.getAttribute("user");
@@ -251,6 +274,9 @@ public class MainController {
     }
 
 
+    // ==============================
+    // LOGOUT
+    // ==============================
     @GetMapping("/logout")
     public String logout(HttpSession session) {
         sessionRegistry.removeSession(session.getId());
@@ -259,11 +285,15 @@ public class MainController {
     }
 
 
+    // ==============================
+    // DEBUG PAGE
+    // ==============================
     @GetMapping("/debug")
     public String debugPage(Model model) {
-        String backendUrl = "http://backend:8080/debug/public/ping"; 
+        String backendUrl = "http://backend:8080/debug/public/ping";
         RestTemplate restTemplate = new RestTemplate();
         String backendResponse;
+
         try {
             backendResponse = restTemplate.getForObject(backendUrl, String.class);
         } catch (Exception e) {
@@ -271,11 +301,13 @@ public class MainController {
         }
 
         model.addAttribute("pingResponse", backendResponse);
-        return "debug"; 
+        return "debug";
     }
 
 
-
+    // ==============================
+    // CATEGORY ROUTES
+    // ==============================
     @GetMapping("/category/{category}")
     public String showCategory(@PathVariable String category, Model model, HttpSession session) {
         User currentUser = (User) session.getAttribute("user");

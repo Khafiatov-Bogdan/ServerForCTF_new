@@ -1,70 +1,256 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PWN Challenges - CTF Platform</title>
+    <title>CTF Platform - Challenges Viewer</title>
     <link rel="stylesheet" href="/static/css/style.css">
-    <link rel="stylesheet" href="/static/css/categories.css">
-    <link rel="stylesheet" href="/static/css/challenges.css">
-    <link rel="stylesheet" href="/static/css/web-challenges.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: #0d0d0d;
+            color: #fff;
+            margin: 0;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 30px;
+            background: #111;
+            box-shadow: 0 2px 10px rgba(0,255,136,0.2);
+        }
+
+        .logo h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 900;
+            color: #00ff88;
+            margin: 0;
+        }
+
+        .nav a {
+            color: #fff;
+            margin-left: 20px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: 0.2s;
+        }
+
+        .nav a:hover {
+            color: #00ff88;
+        }
+
+        /* Контейнер с двумя колонками */
+        .container {
+            display: flex;
+            flex-direction: row; /* горизонтально */
+            gap: 20px;
+            max-width: 1200px;
+            margin: 20px auto;
+        }
+
+        /* Левая колонка */
+        .tasks-list {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .task-item {
+            background: rgba(30,30,30,0.8);
+            padding: 14px;
+            border-radius: 12px;
+            text-align: center;
+            font-weight: 500;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 0 10px rgba(0,255,136,0.2);
+        }
+
+        .task-item:hover {
+            background: rgba(0,255,136,0.1);
+            box-shadow: 0 0 15px rgba(0,255,136,0.6);
+        }
+
+        .task-item.active {
+            background: linear-gradient(135deg, #00ff88, #00ffaa);
+            color: #000;
+            box-shadow: 0 0 20px #00ff88;
+        }
+
+        /* Правая колонка */
+        .task-details {
+            flex: 2;
+            background: rgba(20,20,20,0.9);
+            padding: 20px;
+            border-radius: 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            box-shadow: 0 0 15px rgba(0,255,136,0.3);
+        }
+
+        .task-title {
+            font-size: 1.8em;
+            font-weight: 700;
+            background: linear-gradient(90deg,#00ff88,#00ffaa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: titleGlow 2s ease-in-out infinite alternate;
+        }
+
+        .task-desc {
+            font-size: 1.1em;
+            line-height: 1.4;
+        }
+
+        .letters {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            padding: 12px;
+            border-radius: 8px;
+            background: rgba(40,40,40,0.8);
+        }
+
+        .letter {
+            width: 36px;
+            height: 36px;
+            background: rgba(0,0,0,0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .letter:hover {
+            background: linear-gradient(135deg,#00ff88,#00ffaa);
+            color: #000;
+            box-shadow: 0 0 10px #00ff88;
+        }
+
+        .answer-section {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .answer-input {
+            flex: 1;
+            padding: 10px;
+            border-radius: 8px;
+            border: none;
+            outline: none;
+            background: rgba(30,30,30,0.8);
+            color: #fff;
+            font-size: 1em;
+        }
+
+        .submit-btn {
+            padding: 10px 18px;
+            border-radius: 8px;
+            border: none;
+            background: linear-gradient(135deg,#00ff88,#00ffaa);
+            cursor: pointer;
+            font-weight: 700;
+            color: #000;
+            transition: 0.3s;
+            box-shadow: 0 0 10px #00ff88;
+        }
+
+        .submit-btn:hover {
+            box-shadow: 0 0 15px #00ff88;
+            transform: scale(1.05);
+        }
+
+        @keyframes titleGlow {
+            0% { text-shadow: 0 0 10px #00ff88, 0 0 20px #00ffaa; }
+            100% { text-shadow: 0 0 20px #00ffaa, 0 0 30px #00ff88; }
+        }
+
+        /* Адаптив для мобильных */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .task-details {
+                margin-top: 20px;
+            }
+        }
+    </style>
 </head>
-<body class="body-pwn">
-    <div class="background"></div>
-    <div class="particles">
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
+<body>
+
+<header class="header">
+    <div class="logo"><h1>CTF<span>PLATFORM</span></h1></div>
+    <nav class="nav">
+        <a href="/" class="nav-link">Home</a>
+        <a href="/category/pwn" class="nav-link">PWN</a>
+        <a href="/category/web" class="nav-link">Web</a>
+        <a href="/category/crypto" class="nav-link">Crypto</a>
+        <a href="/users" class="nav-link">Users</a>
+    </nav>
+</header>
+
+<div class="container">
+    <!-- Левая колонка с заданиями -->
+    <div class="tasks-list" id="tasksList"></div>
+
+    <!-- Правая колонка с деталями -->
+    <div class="task-details" id="taskDetails">
+        <div class="task-title">Выберите задание</div>
+        <div class="task-desc">Описание задания появится здесь</div>
+        <div class="letters" id="lettersContainer"></div>
+        <div class="answer-section">
+            <input type="text" class="answer-input" placeholder="Введите ответ">
+            <button class="submit-btn">Ответ</button>
+        </div>
     </div>
+</div>
 
-    <div class="container">
-        <header class="header">
-            <div class="logo">
-                <a th:href="@{/}" style="text-decoration: none; color: inherit;">
-                    <h1>CTF<span>PLATFORM</span></h1>
-                </a>
-            </div>
-            <nav class="nav">
-                <a th:href="@{/}" class="nav-link">Home</a>
-                <a th:href="@{/category/pwn}" class="nav-link active">PWN</a>
-                <a th:href="@{/category/web}" class="nav-link">Web</a>
-                <a th:href="@{/category/crypto}" class="nav-link">Crypto</a>
-                <a th:href="@{/users}" class="nav-link">Users</a>
-                <th:block th:if="${currentUser == null}">
-                    <a th:href="@{/auth}" class="nav-link login-btn">Login</a>
-                </th:block>
-                <th:block th:if="${currentUser != null}">
-                    <a th:href="@{/logout}" class="nav-link login-btn">Logout</a>
-                </th:block>
-            </nav>
-        </header>
+<script>
+    const tasks = Array.from({length:15}, (_,i)=>({
+        title: `Задание ${i+1}`,
+        desc: `Описание задания ${i+1}`,
+        letters: Array.from({length:5}, ()=>String.fromCharCode(97 + Math.floor(Math.random()*26)))
+    }));
 
-        <section class="category-header pwn-bg">
-            <div class="category-info">
-                <div class="category-icon-large">💥</div>
-                <h1>PWN Challenges</h1>
-                <p>Binary exploitation, reverse engineering, and memory corruption</p>
-            </div>
-        </section>
+    const tasksList = document.getElementById('tasksList');
+    tasks.forEach((task,index)=>{
+        const btn = document.createElement('div');
+        btn.className = 'task-item';
+        btn.textContent = index+1;
+        btn.addEventListener('click', ()=>{
+            showTask(index);
+            document.querySelectorAll('.task-item').forEach(t=>t.classList.remove('active'));
+            btn.classList.add('active');
+        });
+        tasksList.appendChild(btn);
+    });
 
-        <section class="tasks-section">
-            <div class="tasks-container">
-                <div class="tasks-list">
-                    <div class="no-tasks">
-                        <h3>Задачи появятся здесь скоро!</h3>
-                        <p>Администратор добавит PWN задачи в ближайшее время.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
+    function showTask(index){
+        const task = tasks[index];
+        const details = document.getElementById('taskDetails');
+        details.querySelector('.task-title').textContent = task.title;
+        details.querySelector('.task-desc').textContent = task.desc;
 
-        <footer class="footer">
-            <p>&copy; 2025 CTF Platform. PWN challenges coming soon.</p>
-        </footer>
-    </div>
+        const lettersContainer = document.getElementById('lettersContainer');
+        lettersContainer.innerHTML='';
+        task.letters.forEach(l=>{
+            const div = document.createElement('div');
+            div.className='letter';
+            div.textContent = l;
+            lettersContainer.appendChild(div);
+        });
+    }
+</script>
 
-    <script src="/static/js/script.js"></script>
 </body>
 </html>

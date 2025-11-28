@@ -31,6 +31,11 @@ public class Base {
     @Autowired
     private UsersService usersService;
 
+
+    // ==========================
+    //      USERS ENDPOINTS
+    // ==========================
+
     @GetMapping("/users")
     public ResponseEntity<List<Users>> getAllUsers() {
         return ResponseEntity.ok(usersService.getAllUsers());
@@ -56,7 +61,8 @@ public class Base {
         }
     }
 
-// =============== POINTS API ===============
+
+    // =============== POINTS API ===============
 
     @GetMapping("/users/{login}/points")
     public ResponseEntity<?> getPoints(@PathVariable String login) {
@@ -104,12 +110,18 @@ public class Base {
         }
     }
 
-// =============== TOP USERS ===============
 
+    // =============== TOP USERS (перенесено из первого файла!) ===============
 
     @GetMapping("/top3")
-    public ResponseEntity<List<Users>> getTop3Users() {
-        return ResponseEntity.ok(usersService.getTop3Users());
+    public ResponseEntity<List<Users.UserNamePointsDTO>> getTop3Users() {
+        List<Users> top = usersService.getTop3Users();
+
+        List<Users.UserNamePointsDTO> dto = top.stream()
+                .map(u -> new Users.UserNamePointsDTO(u.getLogin(), u.getPoints()))
+                .toList();
+
+        return ResponseEntity.ok(dto);
     }
 
 
@@ -117,6 +129,11 @@ public class Base {
     public ResponseEntity<List<Users.UserNamePointsDTO>> getAllNames() {
         return ResponseEntity.ok(usersService.getAllNames());
     }
+
+
+    // ==========================
+    //      ABILITIES
+    // ==========================
 
     @GetMapping("/A/abilities")
     public ResponseEntity<List<Abilities>> getAllAbilities() {
@@ -136,7 +153,6 @@ public class Base {
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
-
     @DeleteMapping("/A/{id}")
     public ResponseEntity<Void> deleteAbility(@PathVariable Long id) {
         try {
@@ -147,26 +163,30 @@ public class Base {
         }
     }
 
+
+    // ==========================
+    //      CHARACTERS
+    // ==========================
+
     @GetMapping("/C/hell")
-    public ResponseEntity<List<com.example.demo.Character>> getAllCharacters() {
-        List<com.example.demo.Character> characters = charactersService.getAllCharacters();
+    public ResponseEntity<List<Character>> getAllCharacters() {
+        List<Character> characters = charactersService.getAllCharacters();
         return ResponseEntity.ok(characters);
     }
 
     @GetMapping("/C/names")
-    public ResponseEntity<List<com.example.demo.Character.CharacterIdName>> getAllName() {
-        List<com.example.demo.Character.CharacterIdName> characters = charactersService.getAllNames();
-        return ResponseEntity.ok(characters);
+    public ResponseEntity<List<Character.CharacterIdName>> getAllName() {
+        return ResponseEntity.ok(charactersService.getAllNames());
     }
 
     @PostMapping("/C")
-    public ResponseEntity<com.example.demo.Character> createUser(@RequestBody com.example.demo.Character user) {
-        com.example.demo.Character createdUser = charactersService.appCharacter(user);
+    public ResponseEntity<Character> createUser(@RequestBody Character user) {
+        Character createdUser = charactersService.appCharacter(user);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
     }
 
     @PutMapping("/C/{id}")
-    public ResponseEntity<com.example.demo.Character> updateUser(@PathVariable Long id, @RequestBody com.example.demo.Character userDetails) {
+    public ResponseEntity<Character> updateUser(@PathVariable Long id, @RequestBody Character userDetails) {
         try {
             Character updatedUser = charactersService.updateCharacter(id, userDetails);
             return ResponseEntity.ok(updatedUser);
@@ -185,24 +205,25 @@ public class Base {
         }
     }
 
+
+    // ==========================
+    //      MOBS
+    // ==========================
+
     @GetMapping("/M/mobs")
     public ResponseEntity<List<Mobs>> getAllMobs() {
-        List<Mobs> mobs = mobsService.findAllMobs();
-        return ResponseEntity.ok(mobs);
+        return ResponseEntity.ok(mobsService.findAllMobs());
     }
 
     @GetMapping("/M/names")
     public ResponseEntity<List<Mobs.MobsIdName>> getAllMobsName() {
-        List<Mobs.MobsIdName> mobs = mobsService.findNames();
-        return ResponseEntity.ok(mobs);
+        return ResponseEntity.ok(mobsService.findNames());
     }
 
     @PostMapping("/M")
     public ResponseEntity<Mobs> createMobs(@RequestBody Mobs mobs) {
-        Mobs created = mobsService.appMobs(mobs);
-        return ResponseEntity.status(HttpStatus.CREATED).body(created);
+        return ResponseEntity.status(HttpStatus.CREATED).body(mobsService.appMobs(mobs));
     }
-
 
     @DeleteMapping("/M/{id}")
     public ResponseEntity<Void> deleteMobs(@PathVariable Long id) {

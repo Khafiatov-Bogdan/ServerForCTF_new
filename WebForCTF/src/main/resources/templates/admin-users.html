@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Управление пользователями</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+  <style>
+    .user-card {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px;
+        margin: 5px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+    }
+    .leader-actions {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+    .leader-actions input {
+        width: 60px;
+        padding: 5px;
+        border-radius: 4px;
+        border: 1px solid #999;
+        text-align: center;
+    }
+    .leader-actions button {
+        padding: 5px 10px;
+        cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+<h1>Управление пользователями</h1>
+<div id="userList"></div>
+
+<script>
+  async function loadUsers() {
+      const container = document.getElementById('userList');
+      container.innerHTML = 'Загрузка...';
+
+      try {
+          const res = await fetch('http://localhost:8081/allNames');
+          const users = await res.json();
+
+          if (!users || users.length === 0) {
+              container.innerHTML = '<p>Нет пользователей</p>';
+              return;
+          }
+
+          container.innerHTML = '';
+          users.forEach(user => {
+              const card = document.createElement('div');
+              card.className = 'user-card';
+              card.innerHTML = `
+                  <span><b>${user.name}</b> - <span id="points-${user.name}">${user.points}</span> pts</span>
+                  <div class="leader-actions">
+                      <input type="number" id="input-${user.name}" placeholder="Баллы">
+                      <button onclick="applyPoints('${user.name}')">Применить</button>
+                  </div>
+              `;
+              container.appendChild(card);
+          });
+      } catch (err) {
+          console.error(err);
+          container.innerHTML = '<p>Ошибка загрузки пользователей</p>';
+      }
+  }
+
+  async function applyPoints(username) {
+      const inputEl = document.getElementById(`input-${username}`);
+      const delta = parseInt(inputEl.value);
+
+      if (isNaN(delta) || delta === 0) {
+          alert('Введите число, отличное от 0');
+          return;
+      }
+
+      const url = `http://localhost:3000/points/update?username=${username}&amount=${delta}`;
+
+      try {
+          const res = await fetch(url, { method: 'POST' });
+          const data = await res.json();
+
+          const pointsEl = document.getElementById(`points-${username}`);
+          if (pointsEl) pointsEl.innerText = parseInt(pointsEl.innerText) + delta;
+
+          inputEl.value = '';
+      } catch (err) {
+          console.error(err);
+          alert('Ошибка при изменении очков');
+      }
+  }
+
+  document.addEventListener('DOMContentLoaded', loadUsers);
+</script>
+</body>
+</html>
