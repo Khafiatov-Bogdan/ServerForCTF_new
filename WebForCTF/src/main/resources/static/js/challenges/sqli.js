@@ -115,7 +115,7 @@ class SQLInjectionChallenge {
         messageElement.className = `message ${type}`;
         messageElement.style.display = 'block';
 
-        // Авто-скрытие успешных сообщений
+
         if (type === 'success') {
             setTimeout(() => {
                 messageElement.style.display = 'none';
@@ -146,7 +146,7 @@ class SQLInjectionChallenge {
             }, 500);
         }
 
-        // Запускаем конфетти
+
         this.createConfetti();
     }
 
@@ -175,7 +175,7 @@ class SQLInjectionChallenge {
             }, i * 100);
         }
 
-        // Добавляем CSS анимацию
+
         if (!document.getElementById('confetti-style')) {
             const style = document.createElement('style');
             style.id = 'confetti-style';
@@ -208,7 +208,7 @@ class SQLInjectionChallenge {
     }
 }
 
-// Инициализация на странице SQL Injection
+
 document.addEventListener('DOMContentLoaded', () => {
     if (window.location.pathname.includes('/sqli')) {
         window.sqliChallenge = new SQLInjectionChallenge();

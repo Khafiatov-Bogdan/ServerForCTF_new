@@ -16,14 +16,14 @@ public class SqlInjectionController {
 
     @GetMapping
     public String sqliChallengePage(Model model) {
-        // Добавляем информацию о задании в модель
+
         challengeService.getChallengeByTitle("SQL Injection Basic")
                 .ifPresent(challenge -> {
                     model.addAttribute("challenge", challenge);
                     model.addAttribute("points", challenge.getPoints());
                 });
 
-        return "challenges/sqli"; // Добавить папку challenges/
+        return "challenges/sqli";
     }
 
     @GetMapping("/info")
@@ -46,13 +46,13 @@ public class SqlInjectionController {
 
         System.out.println("SQL Injection attempt - Username: " + username + ", Password: " + password);
 
-        // Логируем попытку для отладки
+
         if (username.contains("'") || password.contains("'")) {
             System.out.println("Potential SQL injection detected!");
         }
 
         if (challengeService.validateSqlInjection(username, password)) {
-            // Успешная SQL инъекция - возвращаем флаг
+
             return challengeService.getChallengeByTitle("SQL Injection Basic")
                     .map(challenge -> String.format(
                             "{\"success\": true, \"message\": \"✅ SQL Injection успешен! Доступ получен.\", \"flag\": \"%s\"}",

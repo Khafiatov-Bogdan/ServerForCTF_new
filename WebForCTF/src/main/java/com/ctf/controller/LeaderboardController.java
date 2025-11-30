@@ -19,7 +19,7 @@ public class LeaderboardController {
     public List<LeaderboardEntry> getLeaderboard() {
         List<User> topUsers = userService.getTopUsers();
 
-        // Если нет пользователей, возвращаем пустой список
+
         if (topUsers == null || topUsers.isEmpty()) {
             return List.of();
         }
@@ -51,7 +51,7 @@ public class LeaderboardController {
                 .collect(Collectors.toList());
     }
 
-    // Вспомогательный класс для JSON ответа
+
     public static class LeaderboardEntry {
         private String username;
         private Integer score;
@@ -63,7 +63,7 @@ public class LeaderboardController {
             this.createdAt = createdAt;
         }
 
-        // Getters and Setters
+
         public String getUsername() { return username; }
         public void setUsername(String username) { this.username = username; }
 

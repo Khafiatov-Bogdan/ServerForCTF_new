@@ -1,5 +1,5 @@
 package com.ctf.config;
-
+//12
 import com.ctf.service.ChallengeService;
 import com.ctf.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,15 +17,15 @@ public class DataInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        // Инициализация пользователей (если нужно)
+
         initializeUsers();
 
-        // Инициализация заданий
+
         initializeChallenges();
     }
 
     private void initializeUsers() {
-        // Существующая логика инициализации пользователей
+
         try {
             if (!userService.usernameExists("admin")) {
                 userService.registerUser("admin", "admin123", "admin@ctf.local");

@@ -14,17 +14,17 @@ public class ChallengeService {
     @Autowired
     private ChallengeRepository challengeRepository;
 
-    // Добавить метод для инициализации заданий
+
     public void initializeChallenges() {
         // SQL Injection Challenge
         if (!challengeRepository.findByTitle("SQL Injection Basic").isPresent()) {
             Challenge sqliChallenge = new Challenge(
-                    "SQL Injection Basic",
+                    "CTF{sql1_b4s1c_m4st3r_2024}",
                     "Обойдите аутентификацию с помощью SQL инъекции. Найдите флаг в базе данных.",
                     "web",
                     100,
                     "easy",
-                    "CTF{sql_1nj3ct10n_3asy_w1n}",
+                    "CTF{sql_injection_master}",
                     "Попробуйте использовать специальные символы в поле username",
                     "Изучите как работают SQL запросы и кавычки в условиях WHERE"
             );
@@ -39,7 +39,7 @@ public class ChallengeService {
                     "web",
                     120,
                     "easy",
-                    "CTF{auth_bypass_m4st3r_2024}",
+                    "CTF{4uth_byp455_3xp3rt_2024}",
                     "Проверьте разные способы хранения данных в браузере",
                     "Изучите куки, localStorage и параметры URL"
             );
@@ -54,7 +54,7 @@ public class ChallengeService {
                     "web",
                     200,
                     "medium",
-                    "CTF{XSS_MASTER_2024}", // ИЗМЕНЕНО: синхронизирован с фронтендом
+                    "CTF{xss_d0m_m4st3r_2024}",
                     "Попробуйте вставить HTML теги с JavaScript в комментарии",
                     "Изучите различные типы XSS payloads и event handlers"
             );
@@ -69,14 +69,14 @@ public class ChallengeService {
                     "web",
                     150,
                     "medium",
-                    "CTF{csrf_vulnerable_2024}",
+                    "CTF{csrf_t0k3n_byp455_2024}",
                     "Создайте страницу которая автоматически отправляет форму",
                     "Изучите как браузеры обрабатывают запросы между сайтами"
             );
             challengeRepository.save(csrfChallenge);
         }
 
-        // Path Traversal Challenge
+
         if (!challengeRepository.findByTitle("Path Traversal").isPresent()) {
             Challenge pathTraversalChallenge = new Challenge(
                     "Path Traversal",
@@ -84,7 +84,7 @@ public class ChallengeService {
                     "web",
                     250,
                     "hard",
-                    "CTF{path_traversal_master_2024}",
+                    "CTF{p4th_tr4v3rs4l_w1n_2024}",
                     "Используйте последовательности для навигации по директориям",
                     "Изучите как операционные системы обрабатывают пути к файлам"
             );
@@ -105,13 +105,13 @@ public class ChallengeService {
         String vulnerableQuery = "SELECT * FROM users WHERE username = '" + username + "' AND password = '" + password + "'";
         System.out.println("Executing vulnerable query: " + vulnerableQuery);
 
-        // Нормализуем входные данные для проверки
+
         String normalizedUsername = username.trim().toLowerCase();
         String normalizedPassword = password.trim().toLowerCase();
 
-        // Расширенная и более гибкая проверка SQL инъекций
+
         boolean isSqlInjection =
-                // Классические инъекции в username
+
                 normalizedUsername.contains("' or '1'='1") ||
                         normalizedUsername.contains("' or 1=1--") ||
                         normalizedUsername.contains("admin'--") ||
@@ -121,16 +121,16 @@ public class ChallengeService {
                         normalizedUsername.endsWith("'--") ||
                         normalizedUsername.contains("' union select") ||
 
-                        // Инъекции в password
+
                         normalizedPassword.contains("' or '1'='1") ||
                         normalizedPassword.contains("' or 1=1--") ||
 
-                        // Более гибкие проверки
+
                         username.contains("'") && (username.contains("or") || username.contains("OR")) ||
                         username.contains("--") ||
                         username.contains("/*") ||
 
-                        // Проверяем обход аутентификации
+
                         (!username.equals("admin") && username.contains("'--")) ||
                         username.matches(".*'\\s*(OR|or)\\s*'.*'.*");
 
@@ -138,7 +138,7 @@ public class ChallengeService {
         return isSqlInjection;
     }
 
-    // Метод для проверки Path Traversal
+
     public boolean checkPathTraversal(String path) {
         // Уязвимая проверка пути
         if (path.contains("../") ||
@@ -151,7 +151,7 @@ public class ChallengeService {
         return false;
     }
 
-    // Метод для проверки XSS payload
+
     public boolean detectXSSPayload(String input) {
         // Простая проверка XSS векторов
         return input.contains("<script>") ||
@@ -164,7 +164,7 @@ public class ChallengeService {
                 input.contains("alert(");
     }
 
-    // Метод для проверки CSRF атаки
+
     public boolean validateCSRFAttempt(String amount, String targetAccount) {
         // Проверяем типичную CSRF атаку
         return "500".equals(amount) && "attacker_account".equals(targetAccount);

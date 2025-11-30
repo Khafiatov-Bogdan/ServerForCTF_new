@@ -90,7 +90,7 @@
     margin-bottom: 1.5rem;
 }
 
-/* Стили для скроллбара comments-container */
+
 .comments-container::-webkit-scrollbar {
     width: 8px;
 }
@@ -135,7 +135,7 @@
     font-size: 0.8rem;
     margin-bottom: 0.5rem;
     display: flex;
-    justify-content: space-between; /* Исправил "between" на "space-between" */
+    justify-content: space-between;
     align-items: center;
 }
 
@@ -150,7 +150,7 @@
     word-wrap: break-word;
 }
 
-/* Стили для флага при успешной XSS атаке */
+
 .flag-message {
     background: linear-gradient(135deg, rgba(0, 255, 136, 0.1), rgba(0, 136, 255, 0.1));
     border: 2px solid var(--primary-color);
@@ -225,7 +225,7 @@
     100% { left: 100%; }
 }
 
-/* Стили для кнопок управления внутри секции */
+
 .challenge-controls {
     display: flex;
     gap: 1rem;
@@ -238,7 +238,7 @@
     min-width: 140px;
 }
 
-/* Стили для управления заданием */
+
 .challenge-management {
     margin-top: 3rem;
     padding-top: 2rem;
@@ -262,7 +262,7 @@
     transform: translateY(-2px);
 }
 
-/* Адаптивность */
+
 @media (max-width: 768px) {
     .comment-input-group {
         flex-direction: column;

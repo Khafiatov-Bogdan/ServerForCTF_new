@@ -37,29 +37,29 @@ class CTFPlatform {
                     link.classList.add('active');
                 }
             } else if (linkPath) {
-                // Основная логика для обычных ссылок
+
                 if (currentPath === linkPath) {
                     link.classList.add('active');
                 }
-                // Логика для категорий
+
                 else if (currentPath.startsWith('/category/') && linkPath === currentPath) {
                     link.classList.add('active');
                 }
-                // Логика для челленджей
+
                 else if (currentPath.startsWith('/challenges/') && linkPath === currentPath) {
                     link.classList.add('active');
                 }
-                // Главная страница
+
                 else if (currentPath === '/' && linkPath === '/') {
                     link.classList.add('active');
                 }
-                // Пользователи
+
                 else if (currentPath === '/users' && linkPath === '/users') {
                     link.classList.add('active');
                 }
             }
 
-            // Добавляем обработчик клика для отладки
+
             link.addEventListener('click', (e) => {
                 console.log('Navigation click:', linkPath, '->', currentPath);
             });
@@ -77,7 +77,7 @@ class CTFPlatform {
         const particlesContainer = document.querySelector('.particles');
         if (!particlesContainer) return;
 
-        // Очищаем существующие частицы
+
         particlesContainer.innerHTML = '';
 
         const particleCount = 8;
@@ -113,7 +113,7 @@ class CTFPlatform {
     initScrollEffects() {
         const background = document.querySelector('.background');
         if (background) {
-            // Удаляем старые обработчики
+
             background._mouseMoveHandler && document.removeEventListener('mousemove', background._mouseMoveHandler);
 
             background._mouseMoveHandler = (e) => {
@@ -125,7 +125,7 @@ class CTFPlatform {
             window.addEventListener('mousemove', background._mouseMoveHandler);
         }
 
-        // Плавная прокрутка для якорных ссылок
+
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
@@ -138,7 +138,7 @@ class CTFPlatform {
     }
 
     initEventListeners() {
-        // Обработка кликов по карточкам категорий
+
         document.addEventListener('click', (e) => {
             const card = e.target.closest('.category-card');
             if (card && card.onclick) {
@@ -155,11 +155,11 @@ class CTFPlatform {
             }
         });
 
-        // Обработка навигации в выпадающем меню
+
         document.querySelectorAll('.dropdown-content .nav-link').forEach(link => {
             link.addEventListener('click', (e) => {
                 console.log('Dropdown navigation:', link.getAttribute('href'));
-                // Позволяем браузеру обработать переход normally
+
             });
         });
     }
@@ -251,7 +251,7 @@ class CTFPlatform {
     initLeaderboard() {
         const toggleBtn = document.getElementById('toggleLeaderboard');
         if (toggleBtn) {
-            // Удаляем старые обработчики
+
             toggleBtn._clickHandler && toggleBtn.removeEventListener('click', toggleBtn._clickHandler);
 
             toggleBtn._clickHandler = () => {
@@ -358,7 +358,7 @@ class CTFPlatform {
     initCategoryCards() {
         const cards = document.querySelectorAll('.category-card, .challenge-card');
         cards.forEach(card => {
-            // Удаляем старые обработчики
+
             card._mouseEnterHandler && card.removeEventListener('mouseenter', card._mouseEnterHandler);
             card._mouseLeaveHandler && card.removeEventListener('mouseleave', card._mouseLeaveHandler);
 
@@ -391,19 +391,19 @@ class CTFPlatform {
         console.log('Initializing challenge page');
     }
 
-    // Метод для очистки (на случай переиспользования)
+
     destroy() {
-        // Очищаем все обработчики событий
+
         const background = document.querySelector('.background');
         if (background && background._mouseMoveHandler) {
             document.removeEventListener('mousemove', background._mouseMoveHandler);
         }
 
-        // Можно добавить очистку других обработчиков при необходимости
+
     }
 }
 
-// Глобальная инициализация
+
 let ctfPlatformInstance = null;
 
 function initializeCTFPlatform() {
@@ -413,13 +413,13 @@ function initializeCTFPlatform() {
     ctfPlatformInstance = new CTFPlatform();
 }
 
-// Инициализация при загрузке DOM
+
 document.addEventListener('DOMContentLoaded', initializeCTFPlatform);
 
-// Re-initialize when navigating (для SPA-like поведения)
+
 window.addEventListener('popstate', initializeCTFPlatform);
 
-// Утилиты
+
 window.CTFPlatform = {
     showNotification: (message, type = 'info') => {
         const notification = document.createElement('div');

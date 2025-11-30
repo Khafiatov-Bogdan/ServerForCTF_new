@@ -10,47 +10,112 @@ class WebChallengesManager {
     }
 
     init() {
+        console.log('🔧 WebChallengesManager initialized');
         this.initGlobalHandlers();
         this.loadChallengeProgress();
     }
 
     initGlobalHandlers() {
-        // Обработчики для всех заданий
+        console.log('🔧 Initializing global handlers');
+
+
         document.addEventListener('click', (e) => {
-            if (e.target.matches('.show-hint-btn')) {
-                this.showHint(e.target.dataset.challenge);
+            const button = e.target.closest('button');
+            if (!button) return;
+
+            const buttonText = button.textContent;
+
+
+            if (button.closest('.challenge-modal')) {
+                console.log('🔕 Ignoring button inside modal:', buttonText);
+                return;
             }
-            if (e.target.matches('.validate-flag-btn')) {
-                this.validateFlag(e.target.dataset.challenge);
+
+            console.log('🖱️ Button clicked:', buttonText);
+
+            if (buttonText.includes('Подсказка') || buttonText.includes('Hint')) {
+                const challengeName = this.getCurrentChallengeName();
+                console.log('💡 Подсказка button clicked for:', challengeName);
+                this.showHint(challengeName);
+                e.preventDefault();
+                e.stopPropagation();
+            }
+
+            if (buttonText.includes('Проверить флаг') || buttonText.includes('Check Flag') || buttonText.includes('Validate')) {
+                const challengeName = this.getCurrentChallengeName();
+                console.log('🏴‍☠️ Проверить флаг button clicked for:', challengeName);
+                this.showFlagValidationModal(challengeName);
+                e.preventDefault();
+                e.stopPropagation();
             }
         });
 
-        // Обработчики для кнопок управления заданиями
-        document.addEventListener('click', (e) => {
-            if (e.target.closest('button')?.textContent.includes('Подсказка')) {
-                const challengeName = this.getCurrentChallengeName();
-                this.showHint(challengeName);
+
+        this.fixLegacyButtons();
+    }
+
+
+    fixLegacyButtons() {
+        console.log('🔧 Fixing legacy buttons');
+
+
+        const buttons = document.querySelectorAll('button[onclick*="validateChallengeFlag"], button[onclick*="showChallengeHint"]');
+
+        buttons.forEach(button => {
+            const onclick = button.getAttribute('onclick');
+            console.log('🔧 Processing legacy button:', onclick);
+
+            if (onclick.includes('validateChallengeFlag')) {
+
+                const match = onclick.match(/validateChallengeFlag\('([^']+)'\)/);
+                if (match) {
+                    const challengeName = match[1];
+                    button.onclick = null;
+                    button.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        console.log('🏴‍☠️ Legacy validate button clicked for:', challengeName);
+                        this.showFlagValidationModal(challengeName);
+                    });
+                }
             }
-            if (e.target.closest('button')?.textContent.includes('Проверить флаг')) {
-                const challengeName = this.getCurrentChallengeName();
-                this.showFlagValidationModal(challengeName);
+
+            if (onclick.includes('showChallengeHint')) {
+
+                const match = onclick.match(/showChallengeHint\('([^']+)'\)/);
+                if (match) {
+                    const challengeName = match[1];
+                    button.onclick = null;
+                    button.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        console.log('💡 Legacy hint button clicked for:', challengeName);
+                        this.showHint(challengeName);
+                    });
+                }
             }
         });
     }
 
     getCurrentChallengeName() {
-        // Определяем текущее задание по URL
+
         const path = window.location.pathname;
-        if (path.includes('/xss')) return 'XSS Challenge';
-        if (path.includes('/sqli')) return 'SQL Injection Basic';
-        if (path.includes('/auth-bypass')) return 'Authentication Bypass';
-        if (path.includes('/csrf')) return 'CSRF Challenge';
-        if (path.includes('/path-traversal')) return 'Path Traversal';
-        return 'Unknown Challenge';
+        let challengeName = 'Unknown Challenge';
+
+        if (path.includes('/xss')) challengeName = 'XSS Challenge';
+        else if (path.includes('/sqli')) challengeName = 'SQL Injection Basic';
+        else if (path.includes('/auth-bypass')) challengeName = 'Authentication Bypass';
+        else if (path.includes('/csrf')) challengeName = 'CSRF Challenge';
+        else if (path.includes('/path-traversal')) challengeName = 'Path Traversal';
+
+        console.log('📍 Current challenge detected:', challengeName, 'from path:', path);
+        return challengeName;
     }
 
-    // Универсальное модальное окно для заданий
+
     createChallengeModal(title, content, buttons = []) {
+        console.log('📦 Creating modal:', title);
+
         const modal = document.createElement('div');
         modal.className = 'challenge-modal';
         modal.style.cssText = `
@@ -117,6 +182,7 @@ class WebChallengesManager {
         });
 
         closeBtn.addEventListener('click', () => {
+            console.log('❌ Modal closed');
             modal.remove();
         });
 
@@ -139,7 +205,7 @@ class WebChallengesManager {
         modalContent.appendChild(titleElement);
         modalContent.appendChild(contentElement);
 
-        // Добавляем кнопки если есть
+
         if (buttons.length > 0) {
             const buttonsContainer = document.createElement('div');
             buttonsContainer.className = 'modal-buttons';
@@ -159,13 +225,17 @@ class WebChallengesManager {
 
                 if (buttonConfig.onClick) {
                     button.addEventListener('click', () => {
+                        console.log('🔄 Button clicked:', buttonConfig.text);
                         buttonConfig.onClick();
                         if (buttonConfig.closeModal !== false) {
                             modal.remove();
                         }
                     });
                 } else {
-                    button.addEventListener('click', () => modal.remove());
+                    button.addEventListener('click', () => {
+                        console.log('❌ Cancel button clicked');
+                        modal.remove();
+                    });
                 }
 
                 buttonsContainer.appendChild(button);
@@ -176,16 +246,18 @@ class WebChallengesManager {
 
         modal.appendChild(modalContent);
 
-        // Закрытие по клику вне модального окна
+
         modal.addEventListener('click', (e) => {
             if (e.target === modal) {
+                console.log('❌ Modal closed by backdrop click');
                 modal.remove();
             }
         });
 
         document.body.appendChild(modal);
+        console.log('✅ Modal created and appended to body');
 
-        // Добавляем стили анимации если их нет
+
         if (!document.querySelector('#modal-styles')) {
             const style = document.createElement('style');
             style.id = 'modal-styles';
@@ -226,8 +298,9 @@ class WebChallengesManager {
         return modal;
     }
 
-    // Универсальное окно для ввода флага
     showFlagValidationModal(challengeName) {
+        console.log('🏴‍☠️ Showing flag validation modal for:', challengeName);
+
         const modal = this.createChallengeModal(
             '🔍 Проверка флага',
             `
@@ -250,76 +323,115 @@ class WebChallengesManager {
                 {
                     text: '✅ Проверить флаг',
                     className: 'cta-btn primary full-width',
-                    onClick: () => this.submitFlag(challengeName),
+                    onClick: () => {
+                        console.log('🔄 Validate flag button in modal clicked');
+                        this.submitFlag(challengeName);
+                    },
                     closeModal: false
                 },
                 {
                     text: '❌ Отмена',
                     className: 'cta-btn secondary',
-                    onClick: () => {}
+                    onClick: () => {
+                        console.log('🚫 Flag validation cancelled');
+                    }
                 }
             ]
         );
 
-        // Добавляем обработчик Enter
+
         const flagInput = modal.querySelector('#flagInput');
         flagInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
+                console.log('↵ Enter key pressed in flag input');
                 this.submitFlag(challengeName);
             }
         });
 
         flagInput.focus();
+        console.log('🎯 Flag input focused');
     }
 
     async submitFlag(challengeName) {
+        console.log('🚀 Starting flag validation for:', challengeName);
+
         const flagInput = document.querySelector('#flagInput');
         const flagMessage = document.querySelector('#flagMessage');
 
-        if (!flagInput || !flagMessage) return;
+        if (!flagInput || !flagMessage) {
+            console.error('❌ Flag input or message element not found');
+            return;
+        }
 
         const flag = flagInput.value.trim();
+        console.log('📝 Flag submitted:', flag);
+
         if (!flag) {
+            console.warn('⚠️ Empty flag submitted');
             flagMessage.innerHTML = '<span style="color: var(--error-color);">⚠️ Введите флаг</span>';
             return;
         }
 
         try {
-            const endpoint = this.getChallengeEndpoint(challengeName);
-            const response = await fetch(`/challenges/${endpoint}/validate`, {
+            const url = `/api/challenges/validate`;
+
+            console.log('🌐 Making request to:', url);
+            console.log('📦 Request payload:', { challengeName, flag });
+
+            const response = await fetch(url, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Content-Type': 'application/json',
                 },
-                body: `flag=${encodeURIComponent(flag)}`
+                body: JSON.stringify({
+                    challengeName: challengeName,
+                    flag: flag
+                })
             });
 
+            console.log('📨 Response status:', response.status);
+
             const result = await response.json();
+            console.log('📊 Response result:', result);
 
             if (result.success) {
+                console.log('🎉 Flag validation SUCCESS');
                 flagMessage.innerHTML = `<span style="color: var(--primary-color);">🎉 ${result.message}</span>`;
                 this.markChallengeAsSolved(challengeName);
 
-                // Автоматически закрываем через 2 секунды
                 setTimeout(() => {
                     const modal = document.querySelector('.challenge-modal');
                     if (modal) modal.remove();
                 }, 2000);
             } else {
+                console.log('❌ Flag validation FAILED:', result.message);
                 flagMessage.innerHTML = `<span style="color: var(--error-color);">❌ ${result.message}</span>`;
             }
         } catch (error) {
-            flagMessage.innerHTML = `<span style="color: var(--error-color);">⚠️ Ошибка проверки флага</span>`;
-            console.error('Flag validation error:', error);
+            console.error('💥 Flag validation error:', error);
+            flagMessage.innerHTML = `
+                <span style="color: var(--error-color);">
+                    ⚠️ Ошибка проверки флага: ${error.message}
+                </span>
+            `;
         }
     }
 
-    // Универсальное окно подсказки
+
     async showHint(challengeName) {
+        console.log('💡 Loading hint for:', challengeName);
+
         try {
             const endpoint = this.getChallengeEndpoint(challengeName);
-            const response = await fetch(`/challenges/${endpoint}/hint`);
+            const url = `/challenges/${endpoint}/hint`;
+
+            console.log('🌐 Fetching hint from:', url);
+
+            const response = await fetch(url);
+            console.log('📨 Hint response status:', response.status);
+
             const result = await response.json();
+            console.log('💡 Hint received:', result);
 
             this.createChallengeModal(
                 '💡 Подсказка',
@@ -340,12 +452,14 @@ class WebChallengesManager {
                     {
                         text: 'Понятно',
                         className: 'cta-btn primary',
-                        onClick: () => {}
+                        onClick: () => {
+                            console.log('✅ Hint acknowledged');
+                        }
                     }
                 ]
             );
         } catch (error) {
-            console.error('Hint loading error:', error);
+            console.error('❌ Hint loading error:', error);
             CTFPlatform.showNotification('Ошибка загрузки подсказки', 'error');
         }
     }
@@ -354,31 +468,43 @@ class WebChallengesManager {
         const endpoints = {
             'SQL Injection Basic': 'sqli',
             'Authentication Bypass': 'auth-bypass',
-            'XSS Challenge': 'xss', // ДОБАВЛЕНО: endpoint для XSS
+            'XSS Challenge': 'xss',
             'CSRF Challenge': 'csrf',
             'Path Traversal': 'path-traversal'
         };
-        return endpoints[challengeName] || challengeName.toLowerCase().replace(' ', '-');
+
+        const endpoint = endpoints[challengeName] || challengeName.toLowerCase().replace(' ', '-');
+        console.log('🔗 Challenge endpoint mapping:', challengeName, '→', endpoint);
+
+        return endpoint;
     }
 
     markChallengeAsSolved(challengeName) {
+        console.log('🏆 Marking challenge as solved:', challengeName);
+
         const solvedChallenges = JSON.parse(localStorage.getItem('solvedChallenges') || '{}');
         solvedChallenges[challengeName] = true;
         localStorage.setItem('solvedChallenges', JSON.stringify(solvedChallenges));
 
-        // Обновляем UI если на странице категорий
+        console.log('💾 Saved to localStorage:', solvedChallenges);
+
+
         this.updateChallengeProgress();
 
         CTFPlatform.showNotification(`🎉 Задание "${challengeName}" выполнено!`, 'success');
     }
 
     loadChallengeProgress() {
-        const solvedChallenges = JSON.parse(localStorage.getItem('solvedChallenges') || '{}');
+        console.log('📊 Loading challenge progress from localStorage');
 
-        // Обновляем карточки заданий
+        const solvedChallenges = JSON.parse(localStorage.getItem('solvedChallenges') || '{}');
+        console.log('📋 Solved challenges:', solvedChallenges);
+
+
         document.querySelectorAll('.challenge-card').forEach(card => {
             const challengeName = card.querySelector('h3').textContent;
             if (solvedChallenges[challengeName]) {
+                console.log('✅ Challenge already solved:', challengeName);
                 card.classList.add('solved');
                 const solvedBadge = document.createElement('span');
                 solvedBadge.className = 'solved-badge';
@@ -389,33 +515,50 @@ class WebChallengesManager {
     }
 
     updateChallengeProgress() {
-        console.log('Challenge progress updated');
+        console.log('🔄 Updating challenge progress UI');
     }
 }
 
 function showChallengeHint(challengeName) {
+    console.log('🔧 Global showChallengeHint called for:', challengeName);
+
     if (window.webChallengesManager) {
         window.webChallengesManager.showHint(challengeName);
     } else {
-        // Fallback если менеджер не инициализирован
+        console.warn('⚠️ WebChallengesManager not initialized, creating fallback');
         const manager = new WebChallengesManager();
         manager.showHint(challengeName);
     }
 }
 
 function validateChallengeFlag(challengeName) {
+    console.log('🔧 Global validateChallengeFlag called for:', challengeName);
+
     if (window.webChallengesManager) {
         window.webChallengesManager.showFlagValidationModal(challengeName);
     } else {
-        // Fallback если менеджер не инициализирован
+        console.warn('⚠️ WebChallengesManager not initialized, creating fallback');
         const manager = new WebChallengesManager();
         manager.showFlagValidationModal(challengeName);
     }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    if (window.location.pathname.includes('/category/web') || 
+    console.log('📄 DOM Content Loaded');
+
+    if (window.location.pathname.includes('/category/web') ||
         window.location.pathname.includes('/challenges/')) {
+        console.log('🎯 Initializing WebChallengesManager for web challenges page');
         window.webChallengesManager = new WebChallengesManager();
+    } else {
+        console.log('ℹ️ Not a web challenges page, skipping WebChallengesManager initialization');
     }
 });
+
+
+window.debugChallenges = function() {
+    console.log('🐛 DEBUG CHALLENGES');
+    console.log('Current URL:', window.location.href);
+    console.log('WebChallengesManager:', window.webChallengesManager);
+    console.log('LocalStorage solved:', JSON.parse(localStorage.getItem('solvedChallenges') || '{}'));
+};

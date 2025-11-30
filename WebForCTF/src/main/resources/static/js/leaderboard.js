@@ -18,11 +18,11 @@ class CTFLeaderboard {
 
     async loadLeaderboardData() {
         try {
-            // Загрузка данных с сервера
+
             const response = await CTFUtils.fetchJSON('/api/leaderboard');
             this.users = response.users || [];
 
-            // Если данных нет, используем моковые данные
+
             if (this.users.length === 0) {
                 this.users = this.getMockData();
             }
@@ -53,7 +53,7 @@ class CTFLeaderboard {
             });
         }
 
-        // Обновление каждые 30 секунд
+
         setInterval(() => {
             this.refreshData();
         }, 30000);
@@ -95,7 +95,7 @@ class CTFLeaderboard {
             this.renderFullList(fullList);
         }
 
-        // Показываем/скрываем списки в зависимости от текущего вида
+
         this.updateListVisibility();
     }
 
@@ -168,12 +168,12 @@ class CTFLeaderboard {
         await this.loadLeaderboardData();
         this.renderLeaderboard();
 
-        // Показываем уведомление о обновлении
+
         CTFPlatform.showNotification('Leaderboard updated', 'info');
     }
 
     showUserProfile(user) {
-        // Временная реализация - можно расширить для показа модального окна
+
         console.log('User profile:', user);
         CTFPlatform.showNotification(`Viewing profile: ${user.username}`, 'info');
     }
@@ -208,7 +208,7 @@ class CTFLeaderboard {
         });
     }
 
-    // Сортировка пользователей по разным критериям
+
     sortUsers(criteria = 'score') {
         switch (criteria) {
             case 'score':
@@ -225,7 +225,7 @@ class CTFLeaderboard {
     }
 }
 
-// Инициализация на главной странице
+
 document.addEventListener('DOMContentLoaded', () => {
     if (document.querySelector('.leaderboard-widget')) {
         new CTFLeaderboard();

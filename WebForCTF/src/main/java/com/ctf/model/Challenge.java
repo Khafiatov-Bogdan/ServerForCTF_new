@@ -27,7 +27,7 @@ public class Challenge {
     private String solution;
     private String hints;
     
-    // constructors
+
     public Challenge() {}
     
     public Challenge(String title, String description, String category, Integer points, 
@@ -42,7 +42,7 @@ public class Challenge {
         this.hints = hints;
     }
     
-    // getters and setters
+
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
     

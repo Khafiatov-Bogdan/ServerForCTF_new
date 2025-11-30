@@ -75,7 +75,7 @@
     background: linear-gradient(135deg, #00ff88, #00ffaa);
 }
 
-/* Dropdown Styles */
+
 .nav-dropdown {
     position: relative;
     display: inline-block;
@@ -117,7 +117,7 @@
     transform: none;
 }
 
-/* Адаптивность */
+
 @media (max-width: 1200px) {
     .header {
         padding: 1rem 20px;
@@ -130,7 +130,7 @@
     }
 
     .nav-dropdown {
-        display: none; /* Скрываем dropdown на мобильных */
+        display: none;
     }
 }
 
@@ -149,6 +149,6 @@
     }
 
     .nav-dropdown {
-        display: none; /* Скрываем dropdown на мобильных */
+        display: none;
     }
 }

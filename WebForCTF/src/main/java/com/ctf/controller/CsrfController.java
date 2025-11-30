@@ -21,16 +21,20 @@ public class CsrfController {
                     model.addAttribute("challenge", challenge);
                     model.addAttribute("points", challenge.getPoints());
                 });
-        return "challenges/csrf"; // Добавить папку challenges/
+        return "challenges/csrf";
     }
 
     @PostMapping("/transfer")
     @ResponseBody
-    public String transferFunds(@RequestParam String amount, 
-                               @RequestParam String targetAccount) {
-        // Уязвимый endpoint без CSRF защиты
+    public String transferFunds(@RequestParam String amount,
+                                @RequestParam String targetAccount) {
+
+        String flag = challengeService.getChallengeByTitle("CSRF Challenge")
+                .map(Challenge::getFlag)
+                .orElse("CTF{csrf_master_2024}");
+
         return String.format("{\"success\": true, \"message\": \"✅ Transfer of $%s to %s completed\", \"flag\": \"%s\"}",
-                amount, targetAccount, "CTF{csrf_vulnerable_2024}");
+                amount, targetAccount, flag);
     }
 
     @PostMapping("/validate")

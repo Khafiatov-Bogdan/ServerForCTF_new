@@ -2,27 +2,23 @@ package com.ctf.controller;
 
 import com.ctf.model.User;
 import com.ctf.service.UserService;
+import com.ctf.service.ChallengeService;
 import jakarta.servlet.http.HttpSession;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import java.util.Base64;
+
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.HashMap;
 
 @Controller
 public class MainController {
@@ -31,7 +27,12 @@ public class MainController {
     private UserService userService;
 
     @Autowired
+    private ChallengeService challengeService;
+
+    @Autowired
     private com.ctf.session.SessionRegistry sessionRegistry;
+
+    private static final Logger logger = LoggerFactory.getLogger(MainController.class);
 
     @GetMapping("/")
     public String home(Model model, HttpSession session) {
@@ -80,8 +81,6 @@ public class MainController {
         return "auth";
     }
 
-    private static final Logger logger = LoggerFactory.getLogger(MainController.class);
-
     @PostMapping("/login")
     public String loginUser(
             @RequestParam String username,
@@ -95,7 +94,6 @@ public class MainController {
         }
         try {
 
-            Logger logger = LoggerFactory.getLogger(MainController.class);
             logger.info("LOGIN ATTEMPT: username={} sessionID={}", username, session.getId());
 
             Map<String, String> payload = Map.of(
@@ -137,14 +135,12 @@ public class MainController {
             }
 
         } catch (HttpClientErrorException.Unauthorized e) {
-            Logger logger = LoggerFactory.getLogger(MainController.class);
             logger.warn("LOGIN FAILED: username={} reason=401 Unauthorized sessionID={}",
                     username, session.getId());
             model.addAttribute("error", "Неверный логин или пароль");
             model.addAttribute("isLogin", true);
             return "auth";
         } catch (Exception e) {
-            Logger logger = LoggerFactory.getLogger(MainController.class);
             logger.error("LOGIN ERROR: username={} exception={} sessionID={}",
                     username, e.getMessage(), session.getId());
             model.addAttribute("error", "Ошибка при входе: " + e.getMessage());
@@ -305,7 +301,7 @@ public class MainController {
         }
     }
 
-    // Маршрут для обзора web-заданий
+
     @GetMapping("/challenges/web")
     public String webChallengesOverview(Model model, HttpSession session) {
         User currentUser = (User) session.getAttribute("user");
@@ -314,7 +310,7 @@ public class MainController {
         model.addAttribute("currentUser", currentUser);
         model.addAttribute("isAuthenticated", isAuthenticated != null && isAuthenticated);
 
-        // Исправленный список с явным указанием типа
+
         List<Map<String, Object>> challenges = List.of(
                 Map.<String, Object>of("title", "SQL Injection Basic", "points", 100, "difficulty", "easy", "url", "/challenges/sqli"),
                 Map.<String, Object>of("title", "Authentication Bypass", "points", 120, "difficulty", "easy", "url", "/challenges/auth-bypass"),
@@ -327,4 +323,28 @@ public class MainController {
         return "categories/web";
     }
 
+    @PostMapping("/api/challenges/validate")
+    @ResponseBody
+    public String validateChallengeFlag(@RequestBody Map<String, String> request) {
+        try {
+            String challengeName = request.get("challengeName");
+            String flag = request.get("flag");
+
+            System.out.println("Validating flag for challenge: " + challengeName);
+            System.out.println("Flag: " + flag);
+
+            boolean isValid = challengeService.validateFlagByChallengeName(challengeName, flag);
+
+            if (isValid) {
+                System.out.println("Flag validation SUCCESS for: " + challengeName);
+                return "{\"success\": true, \"message\": \"🎉 Флаг верный! Задание выполнено.\"}";
+            } else {
+                System.out.println("Flag validation FAILED for: " + challengeName);
+                return "{\"success\": false, \"message\": \"❌ Неверный флаг. Попробуйте еще раз.\"}";
+            }
+        } catch (Exception e) {
+            System.err.println("Error validating flag: " + e.getMessage());
+            return "{\"success\": false, \"message\": \"❌ Ошибка сервера при проверке флага\"}";
+        }
+    }
 }

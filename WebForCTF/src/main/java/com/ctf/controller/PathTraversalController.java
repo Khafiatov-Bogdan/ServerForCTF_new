@@ -27,7 +27,7 @@ public class PathTraversalController {
     @GetMapping("/file")
     @ResponseBody
     public String getFile(@RequestParam String path) {
-        // Уязвимый код - позволяет path traversal
+
         if (path.contains("..") || path.contains("etc/passwd") || path.contains("flag")) {
             return "{\"success\": true, \"content\": \"CTF{path_traversal_success_2024}\", \"type\": \"file\"}";
         } else if (path.equals("/public/")) {

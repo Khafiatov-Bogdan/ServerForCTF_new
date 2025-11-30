@@ -150,12 +150,12 @@ class PathTraversalChallenge {
             return;
         }
 
-        // Обновляем текущий путь
+
         if (currentPath) {
             currentPath.textContent = path;
         }
 
-        // Уязвимость: отсутствует проверка path traversal
+
         const normalizedPath = this.normalizePath(path);
         const file = this.virtualFilesystem[normalizedPath];
 
@@ -170,26 +170,26 @@ class PathTraversalChallenge {
             this.showFile(normalizedPath, file);
         }
 
-        // Проверяем path traversal атаку
+
         this.checkPathTraversal(path, normalizedPath);
     }
 
     normalizePath(path) {
-        // Упрощенная нормализация пути (уязвимая)
+
         if (!path.startsWith('/')) {
             path = this.basePath + path;
         }
 
-        // Обработка ../ (уязвимость!)
+
         let normalized = path;
         while (normalized.includes('/../')) {
             normalized = normalized.replace(/[^/]+\/\.\.\//, '');
         }
 
-        // Убираем двойные слеши
+
         normalized = normalized.replace(/\/+/g, '/');
 
-        // Добавляем trailing slash для директорий
+
         if (normalized.endsWith('/') && !this.virtualFilesystem[normalized]) {
             normalized = normalized.slice(0, -1);
         }
@@ -232,7 +232,7 @@ class PathTraversalChallenge {
         fileContent.appendChild(fileList);
         fileContent.className = 'file-content';
 
-        // Скрываем информацию о файле при показе директории
+
         this.hideFileInfo();
     }
 
@@ -248,7 +248,7 @@ class PathTraversalChallenge {
         contentDiv.className = 'file-content-text';
         contentDiv.textContent = file.content;
 
-        // Подсветка синтаксиса для определенных типов файлов
+
         if (path.endsWith('.json')) {
             this.highlightJSON(contentDiv);
         }
@@ -256,7 +256,7 @@ class PathTraversalChallenge {
         fileContent.appendChild(contentDiv);
         fileContent.className = 'file-content success';
 
-        // Показываем информацию о файле
+
         this.showFileInfo(path, file);
     }
 
@@ -317,7 +317,7 @@ class PathTraversalChallenge {
         fileContent.appendChild(errorDiv);
         fileContent.className = 'file-content error';
 
-        // Скрываем информацию о файле при ошибке
+
         this.hideFileInfo();
     }
 
@@ -326,12 +326,12 @@ class PathTraversalChallenge {
             const json = JSON.parse(element.textContent);
             element.textContent = JSON.stringify(json, null, 2);
         } catch (e) {
-            // Не JSON или уже отформатирован
+
         }
     }
 
     checkPathTraversal(originalPath, normalizedPath) {
-        // Проверяем path traversal атаку
+
         const traversalPatterns = [
             /\.\.\//,
             /\/etc\//,
@@ -354,11 +354,11 @@ class PathTraversalChallenge {
     }
 
     showFlag() {
-        const flag = 'CTF{path_traversal_success_2024}';
+        const flag = 'CTF{p4th_tr4v3rs4l_w1n_2024}';
         const fileBrowser = document.querySelector('.file-browser');
         if (!fileBrowser) return;
 
-        // Удаляем предыдущее сообщение с флагом, если есть
+
         const existingFlag = fileBrowser.querySelector('.flag-message');
         if (existingFlag) {
             existingFlag.remove();
@@ -379,7 +379,7 @@ class PathTraversalChallenge {
 
         fileBrowser.appendChild(flagElement);
 
-        // Автоматически копируем флаг в буфер обмена
+
         this.copyToClipboard(flag);
     }
 
@@ -390,7 +390,7 @@ class PathTraversalChallenge {
     }
 
     showNotification(message, type = 'info') {
-        // Простая реализация уведомлений
+
         const notification = document.createElement('div');
         notification.className = `notification ${type}`;
         notification.textContent = message;
@@ -427,7 +427,7 @@ class PathTraversalChallenge {
         this.showDirectory(this.basePath, this.virtualFilesystem[this.basePath]);
     }
 
-    // Методы для демонстрации уязвимостей
+
     demonstrateTraversal() {
         const examples = [
             '../../etc/passwd',
@@ -443,7 +443,6 @@ class PathTraversalChallenge {
 
         this.showNotification('Traversal examples logged to console', 'info');
 
-        // Показываем примеры в alert для удобства
         alert('Path Traversal Examples:\n\n' + examples.join('\n') + '\n\nCheck console for normalized paths');
     }
 
@@ -457,7 +456,7 @@ class PathTraversalChallenge {
         this.loadInitialDirectory();
         this.showNotification('File browser reset to initial state', 'info');
 
-        // Удаляем сообщение с флагом, если есть
+
         const flagMessage = document.querySelector('.flag-message');
         if (flagMessage) {
             flagMessage.remove();
@@ -465,7 +464,7 @@ class PathTraversalChallenge {
     }
 }
 
-// Инициализация на странице Path Traversal
+
 document.addEventListener('DOMContentLoaded', () => {
     if (window.location.pathname.includes('/path-traversal')) {
         window.pathTraversalChallenge = new PathTraversalChallenge();
@@ -473,7 +472,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-// Глобальная функция для обратной совместимости с HTML
+
 window.loadFile = function() {
     if (window.pathTraversalChallenge) {
         window.pathTraversalChallenge.loadFile();

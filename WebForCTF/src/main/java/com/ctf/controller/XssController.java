@@ -27,7 +27,7 @@ public class XssController {
     @PostMapping("/comment")
     @ResponseBody
     public String postComment(@RequestParam String comment) {
-        // Уязвимый код - возвращает комментарий без санитизации
+
         return String.format("{\"success\": true, \"comment\": \"%s\", \"user\": \"anonymous\", \"time\": \"%s\"}",
                 comment, java.time.LocalTime.now().toString());
     }

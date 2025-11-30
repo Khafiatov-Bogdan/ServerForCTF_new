@@ -2,7 +2,7 @@
 @import url('./components/header.css');
 @import url('./components/footer.css');
 
-/* Кнопки */
+
 .cta-btn {
     display: inline-flex;
     align-items: center;
@@ -56,7 +56,7 @@
     box-shadow: 0 5px 20px rgba(0, 255, 136, 0.2);
 }
 
-/* Карточки */
+
 .card {
     background: var(--background-card);
     border: 1px solid var(--border-color);
@@ -167,7 +167,7 @@
     border: 1px solid #f44336;
 }
 
-/* Уведомления */
+
 .notification {
     position: fixed;
     top: 100px;
@@ -204,7 +204,7 @@
     }
 }
 
-/* Terminal */
+
 .terminal-window {
     background: var(--background-card);
     border: 1px solid var(--border-color);
@@ -264,7 +264,7 @@
     51%, 100% { opacity: 0; }
 }
 
-/* Leaderboard */
+
 .leaderboard-widget {
     background: var(--background-card);
     border: 1px solid var(--border-color);

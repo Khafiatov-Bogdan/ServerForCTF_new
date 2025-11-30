@@ -16,17 +16,17 @@ class AuthBypassChallenge {
     }
 
     initEventListeners() {
-        // Основные кнопки доступа
+
         document.getElementById('checkAccessBtn')?.addEventListener('click', () => this.checkAccess());
         document.getElementById('resetAccessBtn')?.addEventListener('click', () => this.resetChallenge());
 
-        // Кнопки методов эксплуатации
+
         document.getElementById('cookieMethodBtn')?.addEventListener('click', () => exploitCookie());
         document.getElementById('localStorageBtn')?.addEventListener('click', () => exploitLocalStorage());
         document.getElementById('sessionStorageBtn')?.addEventListener('click', () => exploitSessionStorage());
         document.getElementById('urlMethodBtn')?.addEventListener('click', () => exploitURLParams());
 
-        // Старая кнопка для обратной совместимости
+
         const checkAccessBtn = document.querySelector('button[onclick="checkAccess()"]');
         if (checkAccessBtn) {
             checkAccessBtn.addEventListener('click', () => this.checkAccess());
@@ -34,11 +34,11 @@ class AuthBypassChallenge {
     }
 
     checkAccess() {
-        // Получаем куки (уязвимость - проверка основана на клиентской стороне)
+
         const cookies = document.cookie;
         const isAdminCookie = this.getCookie('isAdmin');
 
-        // Уязвимая проверка - можно легко обойти
+
         if (isAdminCookie === 'true' || this.checkURLParams() || this.checkLocalStorage()) {
             this.grantAdminAccess();
         } else {
@@ -87,7 +87,7 @@ class AuthBypassChallenge {
         if (adminContent) {
             adminContent.style.display = 'block';
 
-            // Показываем флаг если доступ получен через уязвимость
+
             if (this.detectBypassMethod()) {
                 this.showFlag();
             }
@@ -105,7 +105,7 @@ class AuthBypassChallenge {
         const urlParams = new URLSearchParams(window.location.search);
         const cookies = document.cookie;
 
-        // Обнаружение методов обхода
+
         if (urlParams.get('admin') === 'true' ||
             urlParams.get('debug') === '1' ||
             cookies.includes('isAdmin=true') ||
@@ -117,7 +117,7 @@ class AuthBypassChallenge {
     }
 
     showFlag() {
-        const flag = 'CTF{AUTH_BYPASS_MASTER_2024}';
+        const flag = 'CTF{4uth_byp455_3xp3rt_2024}';
         const adminContent = document.getElementById('adminContent');
         if (!adminContent) return;
 
@@ -188,7 +188,7 @@ class AuthBypassChallenge {
     }
 
     loadAccessLog() {
-        // Загрузка начального лога доступа
+
         this.accessLog = [
             {
                 timestamp: new Date(Date.now() - 300000),
@@ -206,7 +206,7 @@ class AuthBypassChallenge {
         this.updateAccessLog();
     }
 
-    // Методы для демонстрации уязвимостей
+
     setAdminCookie() {
         document.cookie = "isAdmin=true; path=/; max-age=3600";
         if (window.CTFPlatform && window.CTFPlatform.showNotification) {
@@ -234,12 +234,12 @@ class AuthBypassChallenge {
         this.hideAdminContent();
         this.loadAccessLog();
 
-        // Очищаем все методы обхода
+
         document.cookie = "isAdmin=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
         localStorage.removeItem('admin');
         sessionStorage.removeItem('privileges');
 
-        // Очищаем URL параметры
+
         const url = new URL(window.location);
         url.searchParams.delete('admin');
         url.searchParams.delete('debug');
@@ -251,14 +251,14 @@ class AuthBypassChallenge {
     }
 }
 
-// Глобальные функции для обратной совместимости
+
 function checkAccess() {
     if (window.authBypassChallenge) {
         window.authBypassChallenge.checkAccess();
     }
 }
 
-// Вспомогательные функции для демонстрации уязвимостей
+
 function exploitCookie() {
     if (window.authBypassChallenge) {
         window.authBypassChallenge.setAdminCookie();
@@ -286,7 +286,7 @@ function exploitURLParams() {
         window.CTFPlatform.showNotification('URL parameters set. Try checking access now.', 'info');
     }
 
-    // Автоматически проверяем доступ после установки параметров
+
     setTimeout(() => {
         if (window.authBypassChallenge) {
             window.authBypassChallenge.checkAccess();
@@ -294,7 +294,7 @@ function exploitURLParams() {
     }, 500);
 }
 
-// Инициализация на странице Auth Bypass
+
 document.addEventListener('DOMContentLoaded', () => {
     if (window.location.pathname.includes('/auth-bypass')) {
         window.authBypassChallenge = new AuthBypassChallenge();

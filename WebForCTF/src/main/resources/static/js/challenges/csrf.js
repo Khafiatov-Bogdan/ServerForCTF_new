@@ -51,10 +51,10 @@ class CSRFChallenge {
             return;
         }
 
-        // Проверяем CSRF токен (уязвимость - токен не проверяется)
+
         const token = document.querySelector('input[name="csrf_token"]')?.value;
 
-        // Имитация успешного перевода
+
         this.balance -= amount;
         this.transactions.unshift({
             id: this.transactions.length + 1,
@@ -73,7 +73,7 @@ class CSRFChallenge {
 
         CTFPlatform.showNotification(`Successfully transferred $${amount} to ${targetAccount}`, 'success');
 
-        // Проверяем CSRF атаку
+
         this.checkCSRFAttack(targetAccount, amount);
     }
 
@@ -114,7 +114,7 @@ class CSRFChallenge {
     }
 
     loadTransactionHistory() {
-        // Загрузка истории транзакций
+
         this.transactions = [
             {
                 id: 1,
@@ -136,7 +136,7 @@ class CSRFChallenge {
     }
 
     checkCSRFAttack(targetAccount, amount) {
-        // Проверяем, является ли это CSRF атакой
+
         if (targetAccount === 'attacker_account' && amount === 500) {
             CTFPlatform.showNotification('CSRF attack detected! Flag unlocked!', 'success');
             this.showFlag();
@@ -144,7 +144,7 @@ class CSRFChallenge {
     }
 
     showFlag() {
-        const flag = 'CTF{CSRF_MASTER_2024}';
+        const flag = 'CTF{csrf_t0k3n_byp455_2024}';
         const bankingInterface = document.querySelector('.banking-interface');
         if (!bankingInterface) return;
 
@@ -166,14 +166,12 @@ class CSRFChallenge {
     }
 
     createMaliciousPage() {
-        // Создаем демонстрационную вредоносную страницу для CSRF
+
         console.log('CSRF Token (for demonstration):', this.csrfToken);
 
-        // В реальном приложении здесь бы создавалась отдельная страница
-        // с формой, которая автоматически submits на эндпоинт перевода
     }
 
-    // Метод для демонстрации CSRF уязвимости
+
     demonstrateCSRF() {
         const maliciousForm = `
             <form id="csrfForm" action="/api/transfer" method="POST" style="display: none;">
@@ -206,14 +204,14 @@ class CSRFChallenge {
     }
 }
 
-// Глобальная функция для обратной совместимости
+
 function transferFunds() {
     if (window.csrfChallenge) {
         window.csrfChallenge.transferFunds();
     }
 }
 
-// Инициализация на странице CSRF
+
 document.addEventListener('DOMContentLoaded', () => {
     if (window.location.pathname.includes('/csrf')) {
         window.csrfChallenge = new CSRFChallenge();

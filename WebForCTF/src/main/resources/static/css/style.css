@@ -55,7 +55,7 @@ body {
     min-height: 100vh;
 }
 
-/* АНИМИРОВАННЫЙ ФОН */
+
 .background {
     position: fixed;
     top: 0;
@@ -91,7 +91,7 @@ body {
     100% { transform: translate(50px, 50px); }
 }
 
-/* ЧАСТИЦЫ */
+
 .particles {
     position: fixed;
     top: 0;
@@ -117,19 +117,19 @@ body {
     50% { transform: translateY(-20px) rotate(180deg); }
 }
 
-/* Selection */
+
 ::selection {
     background: rgba(0, 255, 136, 0.3);
     color: var(--text-primary);
 }
 
-/* Focus styles */
+
 *:focus {
     outline: 2px solid var(--primary-color);
     outline-offset: 2px;
 }
 
-/* Улучшенные скроллбары */
+
 ::-webkit-scrollbar {
     width: 8px;
 }
@@ -147,7 +147,7 @@ body {
     background: linear-gradient(var(--secondary-color), var(--primary-color));
 }
 
-/* АДАПТИВНОСТЬ */
+
 @media (max-width: 768px) {
     .background::before {
         background-size: 150px 150px;
@@ -162,13 +162,13 @@ body {
     }
 }
 
-/* Print styles */
+
 @media print {
     .background, .particles { display: none; }
     body { background: white; color: black; }
 }
 
-/* High contrast mode */
+
 @media (prefers-contrast: high) {
     :root {
         --primary-color: #00ff00;
@@ -180,7 +180,7 @@ body {
     }
 }
 
-/* Reduced motion */
+
 @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after {
         animation-duration: 0.01ms !important;
@@ -191,7 +191,7 @@ body {
     .particle { animation: none !important; opacity: 0.1; }
 }
 
-/* ОБЩИЕ СТИЛИ ДЛЯ ЗАГОЛОВКОВ ЗАДАНИЙ */
+
 .challenge-header {
     text-align: center !important;
     padding: 3rem 0 2rem 0 !important;
@@ -301,7 +301,7 @@ body {
     box-shadow: 0 0 15px rgba(255, 165, 0, 0.3) !important;
 }
 
-/* Адаптивность для заголовков */
+
 @media (max-width: 768px) {
     .challenge-title {
         padding: 2rem 1.5rem !important;

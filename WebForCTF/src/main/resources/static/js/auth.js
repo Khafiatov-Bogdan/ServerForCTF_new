@@ -64,7 +64,7 @@ class CTFAuth {
     }
 
     initOAuthHandlers() {
-        // Добавляем обработчики для красивого эффекта
+
         const oauthButtons = document.querySelectorAll('.oauth-btn');
         oauthButtons.forEach(btn => {
             btn.addEventListener('mouseenter', this.addRippleEffect.bind(this));
@@ -97,7 +97,7 @@ class CTFAuth {
             pointer-events: none;
         `;
 
-        // Добавляем стили для анимации
+
         if (!document.querySelector('#ripple-styles')) {
             const style = document.createElement('style');
             style.id = 'ripple-styles';
@@ -258,19 +258,19 @@ class CTFAuth {
         validationElement.style.display = 'block';
     }
 
-    // OAuth методы
+
     showOAuthMessage(provider) {
         this.createOAuthNotification(provider);
     }
 
     createOAuthNotification(provider) {
-        // Удаляем существующие уведомления
+
         const existingNotification = document.querySelector('.oauth-notification');
         const existingOverlay = document.querySelector('.oauth-overlay');
         if (existingNotification) existingNotification.remove();
         if (existingOverlay) existingOverlay.remove();
 
-        // Создаем overlay
+
         const overlay = document.createElement('div');
         overlay.className = 'oauth-overlay';
         overlay.style.cssText = `
@@ -288,7 +288,7 @@ class CTFAuth {
             animation: fadeIn 0.3s ease-out;
         `;
 
-        // Создаем уведомление
+
         const notification = document.createElement('div');
         notification.className = 'oauth-notification';
         notification.style.cssText = `
@@ -306,7 +306,7 @@ class CTFAuth {
             overflow: hidden;
         `;
 
-        // Добавляем градиентный фон
+
         notification.innerHTML = `
             <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at 30% 20%, rgba(0, 255, 136, 0.1), transparent 50%), radial-gradient(circle at 70% 80%, rgba(0, 136, 255, 0.1), transparent 50%); pointer-events: none;"></div>
 
@@ -348,7 +348,7 @@ class CTFAuth {
             </div>
         `;
 
-        // Добавляем стили для анимации
+
         if (!document.querySelector('#oauth-styles')) {
             const style = document.createElement('style');
             style.id = 'oauth-styles';
@@ -387,7 +387,7 @@ class CTFAuth {
             document.head.appendChild(style);
         }
 
-        // Обработчик закрытия
+
         const closeHandler = () => {
             notification.style.animation = 'slideInUp 0.3s ease-out reverse';
             overlay.style.animation = 'fadeIn 0.3s ease-out reverse';
@@ -406,19 +406,19 @@ class CTFAuth {
         document.body.appendChild(overlay);
         overlay.appendChild(notification);
 
-        // Автоматическое закрытие через 6 секунд
-        setTimeout(closeHandler, 6000);
+
+        setTimeout(closeHandler, 60000);
     }
 }
 
-// Глобальная функция для OAuth кнопок
+
 function showOAuthMessage(provider) {
     if (window.ctfAuth) {
         window.ctfAuth.showOAuthMessage(provider);
     }
 }
 
-// Инициализация
+
 document.addEventListener('DOMContentLoaded', () => {
     if (window.location.pathname === '/auth' || window.location.pathname.includes('/auth')) {
         window.ctfAuth = new CTFAuth();

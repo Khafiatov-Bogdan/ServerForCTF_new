@@ -17,11 +17,11 @@ public interface ChallengeRepository extends JpaRepository<Challenge, Long> {
     Optional<Challenge> findByTitle(String title);
     Optional<Challenge> findByFlag(String flag);
     
-    // Уязвимый метод для демонстрации SQL инъекции
+
     @Query(value = "SELECT * FROM challenges WHERE title = :title", nativeQuery = true)
     List<Challenge> findVulnerableByTitle(@Param("title") String title);
     
-    // Безопасный метод
+
     @Query("SELECT c FROM Challenge c WHERE c.title = :title")
     List<Challenge> findSafeByTitle(@Param("title") String title);
 }

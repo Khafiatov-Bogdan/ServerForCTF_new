@@ -21,7 +21,7 @@ public class AuthenticationBypassController {
                     model.addAttribute("challenge", challenge);
                     model.addAttribute("points", challenge.getPoints());
                 });
-        return "challenges/auth-bypass"; // Добавить папку challenges/
+        return "challenges/auth-bypass";
     }
 
 
@@ -33,33 +33,33 @@ public class AuthenticationBypassController {
                                    @RequestParam(required = false) String sessionId,
                                    @CookieValue(value = "admin", required = false) String adminCookie) {
 
-        // Уязвимая проверка - можно обойти разными способами
+
         boolean isAdmin = false;
         String method = "";
 
-        // Способ 1: Правильный токен
+
         if ("SUPER_SECRET_ADMIN_TOKEN_2024".equals(token)) {
             isAdmin = true;
             method = "token";
         }
-        // Способ 2: Специальная сессия
+
         else if ("admin_session_12345".equals(sessionId)) {
             isAdmin = true;
             method = "session";
         }
-        // Способ 3: Админская кука
+
         else if ("true".equals(adminCookie) || "1".equals(adminCookie)) {
             isAdmin = true;
             method = "cookie";
         }
-        // Способ 4: SQL инъекция в токен
+
         else if (token != null && token.contains("' OR '1'='1")) {
             isAdmin = true;
             method = "sql_injection";
         }
 
         if (isAdmin) {
-            // Используем final переменные для лямбды
+
             final String finalMethod = method;
             return challengeService.getChallengeByTitle("Authentication Bypass")
                     .map(challenge -> String.format(

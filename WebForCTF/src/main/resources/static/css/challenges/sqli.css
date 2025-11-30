@@ -171,7 +171,7 @@
     font-family: 'Roboto', sans-serif;
 }
 
-/* Исправил название класса с .input-group на .form-group */
+
 .form-group {
     margin-bottom: 1.5rem;
     position: relative;
@@ -227,7 +227,7 @@
     box-shadow: 0 5px 20px rgba(0, 255, 136, 0.4);
 }
 
-/* Стили для сообщений */
+
 .message {
     padding: 1rem;
     border-radius: 8px;
@@ -250,7 +250,7 @@
     color: var(--accent-color);
 }
 
-/* Стили для секции подсказок */
+
 .hint-section {
     margin-top: 20px;
     text-align: center;
@@ -312,7 +312,7 @@
     margin: 2px 0;
 }
 
-/* Секция проверки флага */
+
 .flag-check-section {
     margin-top: 2rem;
     padding: 1.5rem;
@@ -353,7 +353,7 @@
     box-shadow: 0 4px 15px rgba(255, 165, 0, 0.4);
 }
 
-/* Специальный класс для флага */
+
 .flag-text {
     -webkit-user-select: text;
     -moz-user-select: text;
@@ -372,7 +372,7 @@
     animation: pulse 2s ease-in-out infinite;
 }
 
-/* Challenge Controls */
+
 .challenge-controls {
     display: flex;
     gap: 1rem;
@@ -385,7 +385,7 @@
     min-width: 140px;
 }
 
-/* Анимации */
+
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -407,7 +407,7 @@
     animation: pulse 0.5s ease-in-out;
 }
 
-/* Стили для управления заданием */
+
 .challenge-management {
     margin-top: 3rem;
     padding-top: 2rem;
@@ -431,7 +431,7 @@
     transform: translateY(-2px);
 }
 
-/* Адаптивность */
+
 @media (max-width: 768px) {
     .container-sqli {
         padding: 0 20px;
