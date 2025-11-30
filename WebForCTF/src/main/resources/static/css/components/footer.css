@@ -71,10 +71,6 @@
     font-family: 'Roboto', sans-serif;
 }
 
-.social-link:hover {
-    color: var(--primary-color);
-}
-
 .footer-bottom {
     border-top: 1px solid var(--border-color);
     padding: 1.5rem 40px;
@@ -128,18 +124,87 @@
     .footer-content {
         padding: 1.5rem 15px 1rem 15px;
     }
-    
+
     .footer-bottom {
         padding: 1rem 15px;
     }
-    
+
     .footer-section h4 {
         font-size: 1rem;
     }
-    
+
     .footer-section p,
     .footer-links a,
     .social-link {
         font-size: 0.85rem;
     }
+
+}
+
+.social-link svg {
+    flex-shrink: 0;
+    transition: all 0.3s ease;
+    border-radius: 4px;
+}
+
+.social-link:hover svg {
+    transform: translateY(-1px);
+    filter: brightness(1.2);
+}
+
+/* Специфичные стили для Telegram */
+.social-link[aria-label="Telegram"]:hover svg {
+    color: #0088cc;
+}
+
+/* Специфичные стили для GitHub */
+.social-link[aria-label="GitHub"]:hover svg {
+    color: #6e5494;
+}
+
+/* Специфичные стили для Discord */
+.social-link[aria-label="Discord"]:hover svg {
+    color: #5865f2;
+}
+
+/* Анимация при наведении на всю ссылку */
+.social-link {
+    position: relative;
+    overflow: hidden;
+}
+
+.social-link::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background: var(--primary-color);
+    transition: width 0.3s ease;
+}
+
+.social-link:hover::after {
+    width: 100%;
+}
+
+.social-link:focus {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+.social-link:hover {
+    color: var(--primary-color);
+}
+
+.social-link[aria-label="Telegram"]:hover {
+    color: #0088cc;
+}
+
+.social-link[aria-label="GitHub"]:hover {
+    color: #6e5494;
+}
+
+.social-link[aria-label="Discord"]:hover {
+    color: #5865f2;
 }
