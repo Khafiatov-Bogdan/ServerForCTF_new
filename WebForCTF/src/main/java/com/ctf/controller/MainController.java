@@ -17,6 +17,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Controller
 public class MainController {
@@ -113,6 +114,7 @@ public class MainController {
             if (response.getStatusCode().is2xxSuccessful()) {
                 session.setAttribute("username", username);
                 session.setAttribute("isAuthenticated", true);
+                session.setAttribute("testCompleted", false); // добавляем флаг прохождения теста
 
                 sessionRegistry.registerSession(session.getId(), username);
 
@@ -217,12 +219,10 @@ public class MainController {
     // ==============================
     @GetMapping("/tests")
     public String testPage(HttpSession session) {
-        String username = (String) session.getAttribute("username");
-
-        if (sessionRegistry.hasCompletedTest(username)) {
+        Boolean completed = (Boolean) session.getAttribute("testCompleted");
+        if (completed != null && completed) {
             return "redirect:/";
         }
-
         return "tests";
     }
 
@@ -232,6 +232,7 @@ public class MainController {
 
         if (username != null) {
             sessionRegistry.markTestCompleted(username);
+            session.setAttribute("testCompleted", true); // помечаем сессию
         }
 
         return ResponseEntity.ok().build();
@@ -242,7 +243,6 @@ public class MainController {
     // ==============================
     @GetMapping("/category/{category}")
     public String showCategory(@PathVariable String category, Model model) {
-
         model.addAttribute("category", category);
 
         switch (category.toLowerCase()) {
@@ -277,7 +277,6 @@ public class MainController {
     @PostMapping("/api/challenges/validate")
     @ResponseBody
     public Map<String, Object> validateChallengeFlag(@RequestBody Map<String, String> request) {
-
         try {
             String challengeName = request.get("challengeName");
             String flag = request.get("flag");
@@ -295,6 +294,89 @@ public class MainController {
     }
 
     // ==============================
+    // PROMO CODE
+    // ==============================
+//    @PostMapping("/promo/use")
+//    @ResponseBody
+//    public Map<String, Object> usePromo(@RequestBody Map<String, Object> body, HttpSession session) {
+//        // Получаем промокод (можно для логов, проверки и т.п.)
+//        String code = (String) body.get("code");
+//        System.out.println("Получен промокод: " + code);
+//
+//        // Получаем количество очков из запроса
+//        Object pointsObj = body.get("points");
+//        if (pointsObj == null) {
+//            return Map.of(
+//                    "success", false,
+//                    "message", "Очки не указаны",
+//                    "points", 0
+//            );
+//        }
+//
+//        int points;
+//        try {
+//            points = Integer.parseInt(pointsObj.toString());
+//        } catch (NumberFormatException e) {
+//            return Map.of(
+//                    "success", false,
+//                    "message", "Некорректное количество очков",
+//                    "points", 0
+//            );
+//        }
+//
+//        String username = (String) session.getAttribute("username");
+//        Boolean isAuthenticated = (Boolean) session.getAttribute("isAuthenticated");
+//        System.out.println("Сессия пользователя: username=" + username + ", isAuthenticated=" + isAuthenticated);
+//
+//        if (username == null || isAuthenticated == null || !isAuthenticated) {
+//            return Map.of(
+//                    "success", false,
+//                    "message", "Сессия не активна",
+//                    "points", 0
+//            );
+//        }
+//
+//        System.out.println("Начисляем очки: " + points);
+//
+//        try {
+//            // Используем /points/add для текущего пользователя
+//            String backendUrl = "http://localhost:3000/points/add?amount=" + points;
+//            System.out.println("Запрос на начисление очков: " + backendUrl);
+//
+//            RestTemplate restTemplate = new RestTemplate();
+//            HttpHeaders headers = new HttpHeaders();
+//            headers.set("Cookie", "JSESSIONID=" + session.getId());
+//            HttpEntity<Void> request = new HttpEntity<>(headers);
+//
+//            ResponseEntity<Map> response = restTemplate.exchange(backendUrl, HttpMethod.POST, request, Map.class);
+//            System.out.println("Ответ от PointsController: " + response.getStatusCode() + ", body=" + response.getBody());
+//
+//            if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null) {
+//                return Map.of(
+//                        "success", true,
+//                        "message", "Промокод активирован, начислено " + points + " очков",
+//                        "points", points
+//                );
+//            } else {
+//                return Map.of(
+//                        "success", false,
+//                        "message", "Ошибка при начислении очков",
+//                        "points", 0
+//                );
+//            }
+//
+//        } catch (Exception e) {
+//            System.out.println("Ошибка при начислении очков: " + e.getMessage());
+//            return Map.of(
+//                    "success", false,
+//                    "message", "Ошибка при начислении очков: " + e.getMessage(),
+//                    "points", 0
+//            );
+//        }
+//    }
+
+
+    // ==============================
     // ACTIVE SESSIONS
     // ==============================
     @GetMapping("/api/sessions")
@@ -307,5 +389,4 @@ public class MainController {
                 ))
                 .toList();
     }
-
 }
