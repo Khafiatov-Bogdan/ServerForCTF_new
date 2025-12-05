@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Управление пользователями</title>
-  <link rel="stylesheet" href="/static/css/style.css">
+  <link rel="stylesheet" href="/css/style.css">
   <style>
     .user-card {
         display: flex;
@@ -39,73 +39,6 @@
 <body>
 <h1>Управление пользователями</h1>
 <div id="userList"></div>
-
-<script>
-  async function loadUsers() {
-      const container = document.getElementById('userList');
-      container.innerHTML = 'Загрузка...';
-
-      try {
-          const res = await fetch('http://localhost:8081/allNames');
-          const users = await res.json();
-
-          if (!users || users.length === 0) {
-              container.innerHTML = '<p>Нет пользователей</p>';
-              return;
-          }
-
-          container.innerHTML = '';
-          users.forEach(user => {
-              const card = document.createElement('div');
-              card.className = 'user-card';
-              card.innerHTML = `
-                  <span><b>${user.name}</b></span>
-                  <div class="points-info">
-                      <span>Points: <span id="points-${user.name}">${user.points ?? 0}</span></span>
-                      <span>Lab Points: <span id="labPoints-${user.name}">${user.pointsLab ?? 0}</span></span>
-                  </div>
-                  <div class="leader-actions">
-                      <input type="number" id="input-${user.name}" placeholder="Баллы">
-                      <button onclick="applyPoints('${user.name}')">Применить</button>
-                  </div>
-              `;
-              container.appendChild(card);
-          });
-      } catch (err) {
-          console.error(err);
-          container.innerHTML = '<p>Ошибка загрузки пользователей</p>';
-      }
-  }
-
-  async function applyPoints(username) {
-      const inputEl = document.getElementById(`input-${username}`);
-      const delta = parseInt(inputEl.value);
-
-      if (isNaN(delta) || delta === 0) {
-          alert('Введите число, отличное от 0');
-          return;
-      }
-
-      const url = `http://localhost:3000/points/update?username=${username}&amount=${delta}`;
-
-      try {
-          const res = await fetch(url, { method: 'POST' });
-          const data = await res.json();
-
-          if (data.success !== false) { // если сервер подтвердил успех
-              inputEl.value = '';
-              // перезагружаем весь список пользователей
-              await loadUsers();
-          } else {
-              alert('Ошибка при обновлении очков');
-          }
-      } catch (err) {
-          console.error(err);
-          alert('Ошибка при изменении очков');
-      }
-  }
-
-  document.addEventListener('DOMContentLoaded', loadUsers);
-</script>
+<script src="/js/admin.js"></script>
 </body>
 </html>

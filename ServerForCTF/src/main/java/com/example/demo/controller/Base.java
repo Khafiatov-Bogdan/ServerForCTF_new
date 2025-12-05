@@ -4,11 +4,13 @@ import com.example.demo.Mobs;
 import com.example.demo.Users;
 import com.example.demo.Abilities;
 import com.example.demo.Promo;
+import com.example.demo.Report;
 import com.example.demo.service.AbilitiesService;
 import com.example.demo.service.CharactersService;
 import com.example.demo.service.MobsService;
 import com.example.demo.service.UsersService;
 import com.example.demo.service.PromoService;
+import com.example.demo.service.ReportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,6 +44,10 @@ public class Base {
 
     @Autowired
     private TaskService taskService;
+
+    @Autowired
+    private ReportService reportService;
+
 
 
     // ================= USERS =================
@@ -342,4 +348,12 @@ public class Base {
                 "points", promo.getPoints()
         ));
     }
+
+
+    @CrossOrigin(origins = "http://localhost:3000")
+    @PostMapping("/report/save")
+    public Report saveReport(@RequestBody Report report) {
+        return reportService.saveOrUpdateReport(report);
+    }
+
 }
