@@ -2,20 +2,22 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Тест</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security Test</title>
 
-    <!-- Главный стиль платформы -->
+    <!-- CSS -->
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/components.css">
     <link rel="stylesheet" href="/css/layout.css">
     <link rel="stylesheet" href="/css/pages/home.css">
     <link rel="stylesheet" href="/css/components/header.css">
-    <link rel="stylesheet" href="/static/css/style.css">
+
+    <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
 </head>
 <body class="body-users">
 
+<!-- Background Elements -->
 <div class="background"></div>
 <div class="particles">
     <div class="particle"></div>
@@ -25,80 +27,216 @@
 </div>
 
 <div class="container">
+    <h1 class="hero-title">ТЕСТИРОВАНИЕ</h1>
+    <p class="hero-subtitle">Проверь свои знания в области безопасности</p>
 
-    <section class="hero" style="padding: 40px 0;">
-        <div class="hero-content">
-            <h1 class="hero-title">ТЕСТИРОВАНИЕ</h1>
-            <p class="hero-subtitle">Пройдите небольшой тест и проверьте свои знания.</p>
-        </div>
-    </section>
-
-    <div class="task-details" style="max-width: 800px; margin: 0 auto; padding: 25px;">
-        <h2 class="section-title" style="text-align:center;">Тест</h2>
-
-        <!-- ВОПРОСЫ ТИПА "ВЫБОР ОТВЕТА" -->
-        <div class="question" data-type="choice" data-correct="b" style="margin-bottom:25px;">
-            <p class="task-desc">1. Какой цвет является основным?</p>
-            <label><input type="radio" name="q1" value="a"> Красный</label><br>
-            <label><input type="radio" name="q1" value="b"> Синий</label><br>
-            <label><input type="radio" name="q1" value="c"> Зелёный</label>
-        </div>
-
-        <!-- ВОПРОСЫ С ВПИСЫВАНИЕМ ОТВЕТА -->
-        <div class="question" data-type="input" data-correct="HTML" style="margin-bottom:25px;">
-            <p class="task-desc">2. Как называется язык разметки веб-страниц?</p>
-            <input type="text" class="answer-input" placeholder="Введите ответ...">
-        </div>
-
-        <button id="checkBtn" class="cta-btn primary glow" onclick="checkTest()">Проверить</button>
-
-        <div id="result" class="task-title" style="margin-top:25px; text-align:center;"></div>
-
-        <!-- Кнопка возврата на главную (скрыта по умолчанию) -->
-        <div id="backContainer" style="text-align:center; margin-top:20px; display:none;">
-            <a href="/" class="cta-btn secondary glow">Вернуться на главную</a>
-        </div>
+    <!-- Вопросы -->
+    <div class="question" data-type="choice" data-id="1">
+        <p>1. Какой UID у пользователя root в Linux?</p>
+        <label><input type="radio" name="q1" value="a"> 1</label><br>
+        <label><input type="radio" name="q1" value="b"> 999</label><br>
+        <label><input type="radio" name="q1" value="c"> 0</label><br>
+        <label><input type="radio" name="q1" value="d"> 500</label>
     </div>
+
+    <div class="question" data-type="choice" data-id="2">
+        <p>2. Какой файл содержит хэши паролей?</p>
+        <label><input type="radio" name="q2" value="a"> /etc/passwd</label><br>
+        <label><input type="radio" name="q2" value="b"> /etc/login.defs</label><br>
+        <label><input type="radio" name="q2" value="c"> /etc/shadow</label><br>
+        <label><input type="radio" name="q2" value="d"> /var/log/auth.log</label>
+    </div>
+
+    <div class="question" data-type="choice" data-id="3">
+        <p>3. Что означает маска прав rw-r--r--?</p>
+        <label><input type="radio" name="q3" value="a"> Только владелец может читать</label><br>
+        <label><input type="radio" name="q3" value="b"> Только владелец может писать</label><br>
+        <label><input type="radio" name="q3" value="c"> Владелец может читать/писать, остальные только читать</label><br>
+        <label><input type="radio" name="q3" value="d"> Все могут писать</label>
+    </div>
+
+    <div class="question" data-type="choice" data-id="4">
+        <p>4. Какой протокол обычно работает на порту 22?</p>
+        <label><input type="radio" name="q4" value="a"> FTP</label><br>
+        <label><input type="radio" name="q4" value="b"> Telnet</label><br>
+        <label><input type="radio" name="q4" value="c"> SSH</label><br>
+        <label><input type="radio" name="q4" value="d"> DNS</label>
+    </div>
+
+    <div class="question" data-type="choice" data-id="5">
+        <p>5. Что означает статус порта filtered в Nmap?</p>
+        <label><input type="radio" name="q5" value="a"> Порт открыт</label><br>
+        <label><input type="radio" name="q5" value="b"> Порт закрыт</label><br>
+        <label><input type="radio" name="q5" value="c"> Пакеты фильтруются FW</label><br>
+        <label><input type="radio" name="q5" value="d"> Сервис не существует</label>
+    </div>
+
+    <div class="question" data-type="choice" data-id="6">
+        <p>6. Какой тип атаки подразумевает подделку MAC-адресов?</p>
+        <label><input type="radio" name="q6" value="a"> DNS Spoof</label><br>
+        <label><input type="radio" name="q6" value="b"> MITM через HTTPS</label><br>
+        <label><input type="radio" name="q6" value="c"> ARP Spoofing</label><br>
+        <label><input type="radio" name="q6" value="d"> SQL Injection</label>
+    </div>
+
+    <div class="question" data-type="choice" data-id="7">
+        <p>7. Какой флаг cookie предотвращает доступ JavaScript к нему?</p>
+        <label><input type="radio" name="q7" value="a"> Secure</label><br>
+        <label><input type="radio" name="q7" value="b"> HttpOnly</label><br>
+        <label><input type="radio" name="q7" value="c"> Lax</label><br>
+        <label><input type="radio" name="q7" value="d"> Strict</label>
+    </div>
+
+    <div class="question" data-type="choice" data-id="8">
+        <p>8. Что делает UNION SELECT при SQL-инъекции?</p>
+        <label><input type="radio" name="q8" value="a"> Удаляет таблицу</label><br>
+        <label><input type="radio" name="q8" value="b"> Позволяет извлечь дополнительные данные</label><br>
+        <label><input type="radio" name="q8" value="c"> Шифрует данные</label><br>
+        <label><input type="radio" name="q8" value="d"> Включает логирование</label>
+    </div>
+
+    <div class="question" data-type="choice" data-id="9">
+        <p>9. Что означает строка $6$ в хэше Linux?</p>
+        <label><input type="radio" name="q9" value="a"> MD5</label><br>
+        <label><input type="radio" name="q9" value="b"> SHA-1</label><br>
+        <label><input type="radio" name="q9" value="c"> SHA-512</label><br>
+        <label><input type="radio" name="q9" value="d"> Blowfish</label>
+    </div>
+
+    <div class="question" data-type="choice" data-id="10">
+        <p>10. Что хранится в ARP-таблице?</p>
+        <label><input type="radio" name="q10" value="a"> Соответствие доменов IP</label><br>
+        <label><input type="radio" name="q10" value="b"> Соответствие IP → MAC</label><br>
+        <label><input type="radio" name="q10" value="c"> Пароли</label><br>
+        <label><input type="radio" name="q10" value="d"> Открытые порты</label>
+    </div>
+
+    <div class="question" data-type="choice" data-id="11">
+        <p>11. Какой тип XSS сохраняется на сервере?</p>
+        <label><input type="radio" name="q11" value="a"> Reflected</label><br>
+        <label><input type="radio" name="q11" value="b"> Stored</label><br>
+        <label><input type="radio" name="q11" value="c"> Blind</label><br>
+        <label><input type="radio" name="q11" value="d"> Local</label>
+    </div>
+
+    <div class="question" data-type="choice" data-id="12">
+        <p>12. Что делает OCSP?</p>
+        <label><input type="radio" name="q12" value="a"> Генерирует сертификаты</label><br>
+        <label><input type="radio" name="q12" value="b"> Проверяет структуру</label><br>
+        <label><input type="radio" name="q12" value="c"> Проверяет статус сертификата</label><br>
+        <label><input type="radio" name="q12" value="d"> Продлевает автоматически</label>
+    </div>
+
+    <div class="question" data-type="choice" data-id="13">
+        <p>13. Какой инструмент применяют для взлома хэшей offline?</p>
+        <label><input type="radio" name="q13" value="a"> Burp Suite</label><br>
+        <label><input type="radio" name="q13" value="b"> Wireshark</label><br>
+        <label><input type="radio" name="q13" value="c"> Hashcat / John</label><br>
+        <label><input type="radio" name="q13" value="d"> Nmap</label>
+    </div>
+
+    <div class="question" data-type="choice" data-id="14">
+        <p>14. Что такое MITM?</p>
+        <label><input type="radio" name="q14" value="a"> Удаление файлов</label><br>
+        <label><input type="radio" name="q14" value="b"> Перехват трафика</label><br>
+        <label><input type="radio" name="q14" value="c"> SQL-инъекция</label><br>
+        <label><input type="radio" name="q14" value="d"> Backup</label>
+    </div>
+
+    <div class="question" data-type="choice" data-id="15">
+        <p>15. Какой атрибут содержит домены?</p>
+        <label><input type="radio" name="q15" value="a"> CN</label><br>
+        <label><input type="radio" name="q15" value="b"> SAN</label><br>
+        <label><input type="radio" name="q15" value="c"> OU</label><br>
+        <label><input type="radio" name="q15" value="d"> CRL</label>
+    </div>
+
+    <div class="question" data-type="choice" data-id="16">
+        <p>16. Что делает DNS Spoofing?</p>
+        <label><input type="radio" name="q16" value="a"> Меняет ARP</label><br>
+        <label><input type="radio" name="q16" value="b"> Подменяет IP</label><br>
+        <label><input type="radio" name="q16" value="c"> Меняет cookie</label><br>
+        <label><input type="radio" name="q16" value="d"> Открывает порт</label>
+    </div>
+
+    <div class="question" data-type="choice" data-id="17">
+        <p>17. Минимальный уровень DVWA?</p>
+        <label><input type="radio" name="q17" value="a"> Medium</label><br>
+        <label><input type="radio" name="q17" value="b"> High</label><br>
+        <label><input type="radio" name="q17" value="c"> Impossible</label><br>
+        <label><input type="radio" name="q17" value="d"> Low</label>
+    </div>
+
+    <div class="question" data-type="choice" data-id="18">
+        <p>18. Что такое brute-force?</p>
+        <label><input type="radio" name="q18" value="a"> Анализ кода</label><br>
+        <label><input type="radio" name="q18" value="b"> SQL-инъекция</label><br>
+        <label><input type="radio" name="q18" value="c"> Полный перебор</label><br>
+        <label><input type="radio" name="q18" value="d"> Перехват cookie</label>
+    </div>
+
+    <div class="question" data-type="choice" data-id="19">
+        <p>19. Где хранится история входов?</p>
+        <label><input type="radio" name="q19" value="a"> /etc/shadow</label><br>
+        <label><input type="radio" name="q19" value="b"> /etc/passwd</label><br>
+        <label><input type="radio" name="q19" value="c"> /var/log/syslog</label><br>
+        <label><input type="radio" name="q19" value="d"> /var/log/auth.log</label>
+    </div>
+
+    <div class="question" data-type="choice" data-id="20">
+        <p>20. Что решает HSTS?</p>
+        <label><input type="radio" name="q20" value="a"> Cookies</label><br>
+        <label><input type="radio" name="q20" value="b"> Скорость</label><br>
+        <label><input type="radio" name="q20" value="c"> Принудительное HTTPS</label><br>
+        <label><input type="radio" name="q20" value="d"> DNS</label>
+    </div>
+
+    <div class="question" data-type="choice" data-id="21">
+        <p>21. Что делает chmod g+w file?</p>
+        <label><input type="radio" name="q21" value="a"> Всё всем</label><br>
+        <label><input type="radio" name="q21" value="b"> Только владелец</label><br>
+        <label><input type="radio" name="q21" value="c"> Группе запись</label><br>
+        <label><input type="radio" name="q21" value="d"> Удаляет права</label>
+    </div>
+
+    <div class="question" data-type="choice" data-id="22">
+        <p>22. Анализ сетевых пакетов?</p>
+        <label><input type="radio" name="q22" value="a"> Hydra</label><br>
+        <label><input type="radio" name="q22" value="b"> SQLMap</label><br>
+        <label><input type="radio" name="q22" value="c"> Hashcat</label><br>
+        <label><input type="radio" name="q22" value="d"> Wireshark</label>
+    </div>
+
+    <div class="question" data-type="choice" data-id="23">
+        <p>23. Что такое TLS?</p>
+        <label><input type="radio" name="q23" value="a"> Хранение паролей</label><br>
+        <label><input type="radio" name="q23" value="b"> Защита трафика</label><br>
+        <label><input type="radio" name="q23" value="c"> Сканирование</label><br>
+        <label><input type="radio" name="q23" value="d"> Логи</label>
+    </div>
+
+    <div class="question" data-type="choice" data-id="24">
+        <p>24. Что такое reflected XSS?</p>
+        <label><input type="radio" name="q24" value="a"> Сохранен навсегда</label><br>
+        <label><input type="radio" name="q24" value="b"> Отражается в ответе</label><br>
+        <label><input type="radio" name="q24" value="c"> Серверный</label><br>
+        <label><input type="radio" name="q24" value="d"> В БД</label>
+    </div>
+
+    <div class="question" data-type="choice" data-id="25">
+        <p>25. Признак ARP-spoof?</p>
+        <label><input type="radio" name="q25" value="a"> Разные TTL</label><br>
+        <label><input type="radio" name="q25" value="b"> Разные MAC для одного IP</label><br>
+        <label><input type="radio" name="q25" value="c"> Большой трафик</label><br>
+        <label><input type="radio" name="q25" value="d"> 21 порт</label>
+    </div>
+
+    <br>
+    <button id="checkBtn" onclick="checkTest()">Проверить</button>
+    <div id="result" style="margin-top:20px;font-size:20px;"></div>
 </div>
 
-<script>
-    function checkTest() {
-        const questions = document.querySelectorAll('.question');
-        let score = 0;
-
-        questions.forEach(q => {
-            const type = q.dataset.type;
-            const correct = q.dataset.correct.trim().toLowerCase();
-
-            if (type === 'choice') {
-                const selected = q.querySelector('input[type="radio"]:checked');
-                if (selected && selected.value.toLowerCase() === correct) score++;
-            }
-
-            if (type === 'input') {
-                const value = q.querySelector('.answer-input').value.trim().toLowerCase();
-                if (value === correct.toLowerCase()) score++;
-            }
-        });
-
-        document.getElementById('result').innerText = `Ваш результат: ${score} / ${questions.length}`;
-
-        document.getElementById('backContainer').style.display = 'block';
-        document.getElementById('checkBtn').style.display = 'none';
-
-
-        fetch("/tests/complete", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            }
-        }).then(r => {
-            if (!r.ok) console.error("Ошибка при сохранении результата теста");
-        }).catch(err => console.error("Ошибка отправки:", err));
-    }
-</script>
-
-
-
+<!-- JS -->
+<script src="/js/tests.js"></script>
 </body>
 </html>
