@@ -24,6 +24,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/ctf
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: Mygiv@ra999
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
     ports:
       - "8081:8080"  # локально backend на http://localhost:8081
     networks:

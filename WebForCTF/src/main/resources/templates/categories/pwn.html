@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CTF Platform - Challenges Viewer</title>
-    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="static/css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
         body {
@@ -216,40 +216,68 @@
 </div>
 
 <script>
-    const tasks = Array.from({length:15}, (_,i)=>({
-        title: `Задание ${i+1}`,
-        desc: `Описание задания ${i+1}`,
-        letters: Array.from({length:5}, ()=>String.fromCharCode(97 + Math.floor(Math.random()*26)))
-    }));
-
+    const apiBaseUrl = 'http://localhost:8081';
     const tasksList = document.getElementById('tasksList');
-    tasks.forEach((task,index)=>{
-        const btn = document.createElement('div');
-        btn.className = 'task-item';
-        btn.textContent = index+1;
-        btn.addEventListener('click', ()=>{
-            showTask(index);
-            document.querySelectorAll('.task-item').forEach(t=>t.classList.remove('active'));
-            btn.classList.add('active');
-        });
-        tasksList.appendChild(btn);
-    });
+
+    async function loadTasks() {
+        let tasks = []
+        try {
+            const response = await fetch(`${apiBaseUrl}/taskspwn/available`);
+            if (!response.ok) {
+                throw new Error(`Ошибка HTTP: ${response.status}`);
+            }
+            tasks = await response.json();
+            console.log(tasks[1]);
+            return tasks;
+        } catch (error) {
+            console.error('Ошибка загрузки задач:', error);
+            tasksList.innerHTML = '<div class="error">Ошибка загрузки задач</div>';
+        }
+    }
+
+    async function init() {
+        // Ждем загрузки задач
+        tasks = await loadTasks();
+        console.log('Tasks после загрузки:', tasks);
+        
+        if (tasks && tasks.length > 0) {
+            tasks.forEach((task, index) => {
+                const btn = document.createElement('div');
+                btn.className = 'task-item';
+                btn.textContent = index + 1;
+                btn.addEventListener('click', () => {
+                    showTask(index);
+                    document.querySelectorAll('.task-item').forEach(t => t.classList.remove('active'));
+                    btn.classList.add('active');
+                });
+                tasksList.appendChild(btn);
+            });
+            
+            if (tasks.length > 0) {
+                showTask(0);
+                const firstBtn = tasksList.querySelector('.task-item');
+                if (firstBtn) firstBtn.classList.add('active');
+            }
+        } else {
+            tasksList.innerHTML = '<div class="error">Нет доступных задач</div>';
+        }
+    }
 
     function showTask(index){
         const task = tasks[index];
         const details = document.getElementById('taskDetails');
         details.querySelector('.task-title').textContent = task.title;
-        details.querySelector('.task-desc').textContent = task.desc;
+        details.querySelector('.task-desc').textContent = task.description;
 
         const lettersContainer = document.getElementById('lettersContainer');
         lettersContainer.innerHTML='';
-        task.letters.forEach(l=>{
-            const div = document.createElement('div');
-            div.className='letter';
-            div.textContent = l;
-            lettersContainer.appendChild(div);
-        });
+        const div = document.createElement('div');
+        div.className='letter';
+        div.textContent = l;
+        lettersContainer.appendChild(div);
     }
+
+    document.addEventListener('DOMContentLoaded', init);
 </script>
 
 </body>

@@ -1,0 +1,162 @@
+[
+    {
+        "category": "pwn",
+        "title": "pwn_strings_basic",
+        "description": "Вам дан бинарный файл challenge.\nФлаг спрятан внутри строки в исполняемом файле.\nНикакого запуска не требуется — просто извлеките строку.",
+        "solved": false,
+        "points": 2,
+        "difficulty": "easy"
+    },
+    {
+        "category": "pwn",
+        "title": "pwn_wrong_password",
+        "description": "Простая программа сравнивает ввод со строкой, флаг лежит в этой строке.\nВ бинаре login есть строка с правильным паролем.\nНайдите её с помощью strings или r2.",
+        "solved": false,
+        "points": 2,
+        "difficulty": "easy"
+    },
+    {
+        "category": "pwn",
+        "title": "pwn_find_flag_in_rodata",
+        "description": "Флаг находится в секции .rodata.\nНайдите флаг, спрятанный в .rodata бинаря ro.exe.",
+        "solved": false,
+        "points": 2,
+        "difficulty": "easy"
+    },
+    {
+        "category": "pwn",
+        "title": "pwn_simple_overflow_static",
+        "description": "Вам дана программа, в которой можно переполнить ввод и получить скрытое сообщение.\nПодайте более 32 символов.",
+        "solved": false,
+        "points": 3,
+        "difficulty": "easy"
+    },
+    {
+        "category": "pwn",
+        "title": "pwn_compare_hidden",
+        "description": "Если ввести строку «admin», программа печатает флаг.\nНо строка не документирована.\nИзучите бинарь check. При каком вводе программа раскрывает флаг?",
+        "solved": false,
+        "points": 2,
+        "difficulty": "easy"
+    },
+    {
+        "category": "pwn",
+        "title": "pwn_env_variable_flag",
+        "description": "Программа читает переменную FLAG_VAR.\nНайдите флаг в бинаре.",
+        "solved": false,
+        "points": 2,
+        "difficulty": "easy"
+    },
+    {
+        "category": "pwn",
+        "title": "pwn_md5_check_fake",
+        "description": "В бинаре есть строка, которая хешируется MD5. Найдите её.",
+        "solved": false,
+        "points": 3,
+        "difficulty": "easy"
+    },
+    {
+        "category": "pwn",
+        "title": "pwn_basic_disasm_flag",
+        "description": "Флаг зашит в mov-инструкцию: mov rdi, offset flag_string. Откройте бинарь в radare2 и найдите строку флага.",
+        "solved": false,
+        "points": 2,
+        "difficulty": "easy"
+    },
+    {
+        "category": "pwn",
+        "title": "pwn_check_password_len",
+        "description": "Функция проверяет, что длина строки == 8. Найдите, какой пароль должен быть введён (он хранится в бинаре).",
+        "solved": false,
+        "points": 2,
+        "difficulty": "easy"
+    },
+    {
+        "category": "pwn",
+        "title": "pwn_format_string_leak_easy",
+        "description": "В бинаре есть printf(input); — форматная строка. Флаг хранится в стеке. Получите флаг, используя %x-формат.",
+        "solved": false,
+        "points": 3,
+        "difficulty": "easy"
+    },
+    {
+        "category": "pwn",
+        "title": "pwn_ret2win_basic",
+        "description": "Найдите оффсет EIP/RIP и перепишите адрес возврата на функцию win.",
+        "solved": false,
+        "points": 6,
+        "difficulty": "medium"
+    },
+    {
+        "category": "pwn",
+        "title": "pwn_buffer_leak_canary",
+        "description": "Используйте уязвимость форматных строк (printf(input)), чтобы узнать защитное значение canary.\nФлаг — это значение canary.",
+        "solved": false,
+        "points": 7,
+        "difficulty": "medium"
+    },
+    {
+        "category": "pwn",
+        "title": "pwn_heap_uaf_intro",
+        "description": "При освобождении объекта его содержимое остаётся в памяти. Используйте это, чтобы прочитать флаг.",
+        "solved": false,
+        "points": 6,
+        "difficulty": "medium"
+    },
+    {
+        "category": "pwn",
+        "title": "pwn_partial_overwrite",
+        "description": "Переполнение позволяет перезаписать только младший байт адреса возврата. Вам нужно подменить только последний байт RIP на адрес, ведущий в win.",
+        "solved": false,
+        "points": 7,
+        "difficulty": "medium"
+    },
+    {
+        "category": "pwn",
+        "title": "pwn_plt_got_leak",
+        "description": "Утеките адрес функции puts через GOT. Флаг — это утёкший адрес функции.",
+        "solved": false,
+        "points": 6,
+        "difficulty": "medium"
+    },
+    {
+        "category": "pwn",
+        "title": "pwn_shellcode_injection_easy",
+        "description": "NX отключён, нужно залить обычный /bin/sh шеллкод. Загрузите в программу шеллкод и получите флаг.",
+        "solved": false,
+        "points": 7,
+        "difficulty": "medium"
+    },
+    {
+        "category": "pwn",
+        "title": "pwn_stack_cookie_bypass",
+        "description": "Утеките значение stack canary через format-string и выполните overflow корректно.",
+        "solved": false,
+        "points": 7,
+        "difficulty": "medium"
+    },
+    {
+        "category": "pwn",
+        "title": "pwn_double_free_intro",
+        "description": "Найдите способ двойного освобождения объекта и извлеките флаг, хранящийся в освобождённом чанке.",
+        "solved": false,
+        "points": 6,
+        "difficulty": "medium"
+    },
+    {
+        "category": "pwn",
+        "title": "pwn_ret2libc_basic",
+        "description": "Утеките адрес puts в libc, вычислите адрес system и /bin/sh, получите флаг.",
+        "solved": false,
+        "points": 8,
+        "difficulty": "medium"
+    },
+    {
+        "category": "pwn",
+        "title": "pwn_rop_chain_basic",
+        "description": "Используя ROP-гаджеты, вызовите system(\"/bin/sh\"). Флаг печатается автоматически.",
+        "solved": false,
+        "points": 8,
+        "difficulty": "medium"
+    }
+]

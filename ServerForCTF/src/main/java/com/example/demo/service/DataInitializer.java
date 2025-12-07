@@ -1,11 +1,24 @@
 package com.example.demo.service;
 
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 import com.example.demo.service.UsersService;
+import com.fasterxml.jackson.databind.DatabindException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.example.demo.service.PromoService;
 import com.example.demo.Task;
 import com.example.demo.service.TaskService;
+import com.example.demo.TaskPWN;
+import com.example.demo.service.TaskPWNService;
+
+import java.nio.file.Paths;
+import java.util.List;
+import java.io.*;
+
+import com.fasterxml.jackson.core.exc.StreamReadException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Component
 public class DataInitializer implements CommandLineRunner {
@@ -13,15 +26,17 @@ public class DataInitializer implements CommandLineRunner {
     private final UsersService usersService;
     private final PromoService promoService;
     private final TaskService taskService;
+    private final TaskPWNService taskPWNService;
 
-    public DataInitializer(UsersService usersService, PromoService promoService, TaskService taskService) {
+    public DataInitializer(UsersService usersService, PromoService promoService, TaskService taskService, TaskPWNService taskPWNService) {
         this.usersService = usersService;
         this.promoService = promoService;
         this.taskService = taskService;
+        this.taskPWNService = taskPWNService;
     }
 
     @Override
-    public void run(String... args) {
+    public void run(String... args) throws StreamReadException, DatabindException, IOException {
 
         // --- Пользователи ---
         String[][] defaultUsers = {
@@ -146,6 +161,28 @@ public class DataInitializer implements CommandLineRunner {
                 System.out.println("Задание уже существует, пропускаем: " + title);
             }
         }
+
+        
+        ObjectMapper mapper = new ObjectMapper();
+
+        ClassPathResource resource = new ClassPathResource("pwnTasks.json");
+
+        List<TaskPWN> tasks = mapper.readValue(
+                resource.getInputStream(),
+                new TypeReference<List<TaskPWN>>() {}
+        );
+
+        for (TaskPWN task : tasks) {
+            if (taskPWNService.getTaskByTitle(task.getTitle()).isEmpty()) {
+                taskPWNService.createTask(task);
+                System.out.println("Добавлено новое задание: " + task.getTitle() + " (" + task.getPoints() + " баллов)");
+            } else {
+                System.out.println("Задание уже существует, пропускаем: " + task.getTitle());
+            }
+        }
+
+        System.out.println("Импортировано " + tasks.size() + " задач");
+
     }
 }
 
