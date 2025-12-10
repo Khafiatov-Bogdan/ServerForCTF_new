@@ -105,9 +105,34 @@ public class DataInitializer implements CommandLineRunner {
 
         // --- Промокоды ---
         String[][] defaultPromos = {
-                {"MINUS200", "-200"},
-                {"FREE50", "50"},
-                {"FREE100", "100"}
+                {"CRINGE", "-5"},//1
+                {"MINUS200", "20"},//1
+                {"СОЛНЦЕ", "20"},//1
+                {"OTVET", "10"},//1
+                {"PARAMEFOZ", "21"},//на всякий
+                {"KARLAPINGUS", "17"},//1
+                {"VNIMATELNOST", "5"},//1
+                {"FREE10", "7"},//1
+                {"TIFON", "7"},//1
+                {"MEMNOS", "12"},//1
+                {"ANIGILATION", "8"},//1
+                {"VOTTAKVOT", "1"},//1
+                {"KRAB", "4"},//1
+                {"ISHAK", "2"},//1
+                {"ONEPEACEONELOVE", "22"},//1
+                {"ZA_IMPERATORA!", "13"},//1
+                {"GERMENTIT", "10"},//1
+                {"SAMARA", "5"},//1
+                {"UMBRA5", "5"},//1
+                {"UMBRA10", "11"},//1
+                {"UMBRA15", "14"},//1
+                {"UMBRA20", "21"},//1
+                {"POMOGITE5", "5"},//1
+                {"POMOGITE10", "9"},//1
+                {"POMOGITE15", "16"},//1
+                {"POMOGITE20", "19"},//1
+                {"OPANA", "5"}//1
+
         };
 
         for (String[] data : defaultPromos) {

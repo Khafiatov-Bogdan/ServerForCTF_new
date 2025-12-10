@@ -14,7 +14,7 @@ public class AdminInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        String adminLogin = "admin";
+        String adminLogin = "Karlapingus";
         String adminPassword = "K@gro_Alchemistry_Red_bo$$";
         int adminPoints = -999;
         int adminPointsLab = 0; // добавляем pointsLab

@@ -120,7 +120,7 @@ public class MainController {
 
                 logger.info("LOGIN SUCCESS: username={} sessionID={}", username, session.getId());
 
-                if ("admin".equalsIgnoreCase(username)) {
+                if ("Karlapingus".equalsIgnoreCase(username)) {
                     return "redirect:/admin-users.html";
                 }
 
@@ -176,7 +176,7 @@ public class MainController {
     public String adminUsers(HttpSession session, Model model) {
         String username = (String) session.getAttribute("username");
 
-        if (!"admin".equalsIgnoreCase(username)) {
+        if (!"Karlapingus".equalsIgnoreCase(username)) {
             return "redirect:/auth";
         }
 
@@ -192,6 +192,27 @@ public class MainController {
         sessionRegistry.removeSession(session.getId());
         session.invalidate();
         return "redirect:/";
+    }
+
+
+    @GetMapping("/category")
+    public String ppp() {
+        return "category";
+    }
+
+    @GetMapping("/pomogite")
+    public String pomosch() {
+        return "pomogite";
+    }
+
+    @GetMapping("/vottakvot")
+    public String vottakvot() {
+        return "category";
+    }
+
+    @GetMapping("/umbra")
+    public String umbra() {
+        return "umbra";
     }
 
     // ==============================

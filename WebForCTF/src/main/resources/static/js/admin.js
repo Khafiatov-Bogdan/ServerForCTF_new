@@ -135,7 +135,6 @@ async function applyPoints(username) {
         alert('Введите число, отличное от 0');
         return;
     }
-    const sessionUsername = currentSession.username;
     const url = `http://localhost:3000/points/update?username=${username}&amount=${delta}`;
 
     try {

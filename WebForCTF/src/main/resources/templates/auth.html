@@ -36,7 +36,10 @@
     <div class="auth-container">
         <div class="auth-card">
             <div class="auth-header">
-                <h1 th:text="${isLogin ? 'Welcome Back' : 'Join CTF'}"></h1>
+                <h3 class="tooltip" data-tip="ANIGILATION">
+                    Welcome Back
+                </h3>
+
                 <p th:text="${isLogin ? 'Sign in to your account' : 'Create your account'}"></p>
             </div>
 
@@ -103,7 +106,7 @@
                 </button>
             </form>
 
-            <!-- Auth Switch -->
+            <!-- KRAB -->
             <div class="auth-switch">
                 <th:block th:if="${isLogin}">
                     <p>Don't have an account? <a th:href="@{/auth(register='true')}">Sign up</a></p>
