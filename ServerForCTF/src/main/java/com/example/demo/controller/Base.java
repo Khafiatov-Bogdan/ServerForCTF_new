@@ -17,8 +17,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.example.demo.Task;
 import com.example.demo.service.TaskService;
-import com.example.demo.TaskPWN;
-import com.example.demo.service.TaskPWNService;
 
 
 import java.util.List;
@@ -37,9 +35,6 @@ public class Base {
 
     @Autowired
     private MobsService mobsService;
-
-    @Autowired
-    private TaskPWNService taskPWNService;
 
     @Autowired
     private UsersService usersService;
@@ -320,48 +315,7 @@ public class Base {
                         .body(Map.of("error", "Task not found")));
     }
 
-    // ================= TASKS PWN =================
 
-    // Получить все незавершённые задания
-    @GetMapping("/taskspwn/available")
-    public ResponseEntity<List<TaskPWN>> getAvailableTasksPWN() {
-        return ResponseEntity.ok(taskPWNService.getAvailableTasks());
-    }
-
-    @PostMapping("/taskspwn/{title}/solve")
-    public ResponseEntity<Map<String, Object>> solveTaskPWNByTitle(@PathVariable String title) {
-        try {
-            TaskPWN task = taskPWNService.markTaskSolvedByTitle(title);
-            Map<String, Object> response = Map.of(
-                    "success", Boolean.TRUE,
-                    "title", task.getTitle(),
-                    "points", Integer.valueOf(task.getPoints())
-            );
-            return ResponseEntity.ok(response);
-        } catch (RuntimeException e) {
-            Map<String, Object> error = Map.of(
-                    "success", Boolean.FALSE,
-                    "message", e.getMessage()
-            );
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
-        }
-    }
-
-    // Метод getTaskPWNStatusByTitle
-    @GetMapping("/taskspwn/{title}/status")
-    public ResponseEntity<Map<String, Object>> getTaskPWNStatusByTitle(@PathVariable String title) {
-        return taskPWNService.getTaskByTitle(title)
-                .map(task -> {
-                    Map<String, Object> response = Map.of(
-                            "title", task.getTitle(),
-                            "solved", Boolean.valueOf(task.isSolved()),
-                            "points", Integer.valueOf(task.getPoints())
-                    );
-                    return ResponseEntity.ok(response);
-                })
-                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(Map.of("error", "Task not found")));
-    }
 
     // ================= PROMO =================
 
