@@ -1,27 +1,68 @@
 package com.example.demo.service;
 
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 import com.example.demo.service.UsersService;
+import com.fasterxml.jackson.databind.DatabindException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import jakarta.transaction.Transactional;
+
 import com.example.demo.service.PromoService;
 import com.example.demo.Task;
 import com.example.demo.service.TaskService;
+import com.example.demo.TaskPWN;
+import com.example.demo.service.TaskPWNService;
+
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Paths;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.List;
+import java.io.*;
+import java.math.BigInteger;
+
+import com.fasterxml.jackson.core.exc.StreamReadException;
+import com.fasterxml.jackson.core.type.TypeReference;
 
 @Component
-public class DataInitializer implements CommandLineRunner {
+public class DataInitializer implements CommandLineRunner  {
 
     private final UsersService usersService;
     private final PromoService promoService;
     private final TaskService taskService;
+    private final TaskPWNService taskPWNService;
 
-    public DataInitializer(UsersService usersService, PromoService promoService, TaskService taskService) {
+    public DataInitializer(UsersService usersService, PromoService promoService, TaskService taskService, TaskPWNService taskPWNService) {
         this.usersService = usersService;
         this.promoService = promoService;
         this.taskService = taskService;
+        this.taskPWNService = taskPWNService;
+    }
+
+     public static String sha256(String input) {
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] hashBytes = digest.digest(input.getBytes(StandardCharsets.UTF_8));
+
+            // Переводим байты в hex строку
+            StringBuilder hexString = new StringBuilder(2 * hashBytes.length);
+            for (byte b : hashBytes) {
+                String hex = Integer.toHexString(0xff & b);
+                if (hex.length() == 1) hexString.append('0'); // добавляем ведущий 0
+                hexString.append(hex);
+            }
+            return hexString.toString();
+
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException("SHA-256 не поддерживается", e);
+        }
     }
 
     @Override
-    public void run(String... args) {
+    @Transactional
+    public void run(String... args) throws StreamReadException, DatabindException, IOException {
 
         // --- Пользователи ---
         String[][] defaultUsers = {
@@ -105,34 +146,9 @@ public class DataInitializer implements CommandLineRunner {
 
         // --- Промокоды ---
         String[][] defaultPromos = {
-                {"CRINGE", "-5"},//1
-                {"MINUS200", "20"},//1
-                {"СОЛНЦЕ", "20"},//1
-                {"OTVET", "10"},//1
-                {"PARAMEFOZ", "21"},//на всякий
-                {"KARLAPINGUS", "17"},//1
-                {"VNIMATELNOST", "5"},//1
-                {"FREE10", "7"},//1
-                {"TIFON", "7"},//1
-                {"MEMNOS", "12"},//1
-                {"ANIGILATION", "8"},//1
-                {"VOTTAKVOT", "1"},//1
-                {"KRAB", "4"},//1
-                {"ISHAK", "2"},//1
-                {"ONEPEACEONELOVE", "22"},//1
-                {"ZA_IMPERATORA!", "13"},//1
-                {"GERMENTIT", "10"},//1
-                {"SAMARA", "5"},//1
-                {"UMBRA5", "5"},//1
-                {"UMBRA10", "11"},//1
-                {"UMBRA15", "14"},//1
-                {"UMBRA20", "21"},//1
-                {"POMOGITE5", "5"},//1
-                {"POMOGITE10", "9"},//1
-                {"POMOGITE15", "16"},//1
-                {"POMOGITE20", "19"},//1
-                {"OPANA", "5"}//1
-
+                {"MINUS200", "-200"},
+                {"FREE50", "50"},
+                {"FREE100", "100"}
         };
 
         for (String[] data : defaultPromos) {
@@ -171,6 +187,29 @@ public class DataInitializer implements CommandLineRunner {
                 System.out.println("Задание уже существует, пропускаем: " + title);
             }
         }
+
+        
+        ObjectMapper mapper = new ObjectMapper();
+
+        ClassPathResource resource = new ClassPathResource("pwnTasks.json");
+
+        List<TaskPWN> tasks = mapper.readValue(
+                resource.getInputStream(),
+                new TypeReference<List<TaskPWN>>() {}
+        );
+
+        for (TaskPWN task : tasks) {
+                task.setFlag(sha256(task.getFlag()));
+            if (taskPWNService.getTaskByTitle(task.getTitle()).isEmpty()) {
+                taskPWNService.createTask(task);
+                System.out.println("Добавлено новое задание: " + task.getTitle() + " (" + task.getPoints() + " баллов)");
+            } else {
+                System.out.println("Задание уже существует, пропускаем: " + task.getTitle());
+            }
+        }
+
+        System.out.println("Импортировано " + tasks.size() + " задач");
+
     }
 }
 
