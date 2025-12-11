@@ -61,7 +61,7 @@ public class PointsController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Не авторизован");
         }
 
-        if (!"admin".equalsIgnoreCase(currentUser)) {
+        if (!"Karlapingus".equalsIgnoreCase(currentUser)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Только админ может изменять очки");
         }
 
