@@ -16,7 +16,7 @@ public class TaskPWN {
     @Column(name = "title", nullable = false)
     private String title;
 
-    @Column(name = "description", nullable = false)
+    @Column(name = "description", nullable = false, columnDefinition = "VARCHAR(2000)")
     private String description;
 
     @Column(name = "solved", nullable = false)
@@ -31,7 +31,7 @@ public class TaskPWN {
     @Column(name = "flag", nullable = false)
     private String flag;
 
-    @Column(name = "binary_name", nullable = false)
+    @Column(name = "binary_name", nullable = true)
     private String binary;
 
     public TaskPWN() {}

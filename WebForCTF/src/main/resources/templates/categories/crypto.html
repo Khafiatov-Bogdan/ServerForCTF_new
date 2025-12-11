@@ -205,51 +205,157 @@
 
     <!-- Правая колонка с деталями -->
     <div class="task-details" id="taskDetails">
-        <div class="task-title">Выберите задание</div>
-        <div class="task-desc">Описание задания появится здесь</div>
+        <div class="task-title" id="taskTitle">Выберите задание</div>
+        <div class="task-desc" style="white-space: pre-line;">Описание задания появится здесь</div>
         <div class="letters" id="lettersContainer"></div>
         <div class="answer-section">
-            <input type="text" class="answer-input" placeholder="Введите ответ">
-            <button class="submit-btn">Ответ</button>
+            <input type="text" class="answer-input" id="answerInput" placeholder="Введите ответ">
+            <button class="submit-btn" id="submitBtn">Ответ</button>
         </div>
     </div>
 </div>
 
-<script>
-    const tasks = Array.from({length:15}, (_,i)=>({
-        title: `Задание ${i+1}`,
-        desc: `Описание задания ${i+1}`,
-        letters: Array.from({length:5}, ()=>String.fromCharCode(97 + Math.floor(Math.random()*26)))
-    }));
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+<script src="/js/loadPWNtasks.js"></script>
+<script src="/js/postPWNtasks.js"></script>
 
+
+<script>
+    const apiBaseUrl = 'http://localhost:8081';
     const tasksList = document.getElementById('tasksList');
-    tasks.forEach((task,index)=>{
-        const btn = document.createElement('div');
-        btn.className = 'task-item';
-        btn.textContent = index+1;
-        btn.addEventListener('click', ()=>{
-            showTask(index);
-            document.querySelectorAll('.task-item').forEach(t=>t.classList.remove('active'));
-            btn.classList.add('active');
-        });
-        tasksList.appendChild(btn);
-    });
+
+    async function init() {
+        tasks = await loadTasks();
+        num = 1;
+        
+        if (tasks && tasks.length > 0) {
+            tasks.forEach((task, index) => {
+                if (task.category !== "crypto") {
+                    return;
+                }
+                if (task.difficulty == "easy") {
+                    const btn = document.createElement('div');
+                    btn.className = 'task-item';
+                    btn.textContent = num;
+                    btn.addEventListener('click', () => {
+                    showTask(index);
+                    document.querySelectorAll('.task-item').forEach(t => t.classList.remove('active'));
+                    btn.classList.add('active');
+                    });
+                    tasksList.appendChild(btn);
+                    num++;
+                }
+            });
+            tasks.forEach((task, index) => {
+                if (task.category !== "crypto") {
+                    return;
+                }
+                if (task.difficulty == "medium") {
+                    const btn = document.createElement('div');
+                    btn.className = 'task-item';
+                    btn.textContent = num;
+                    btn.addEventListener('click', () => {
+                    showTask(index);
+                    document.querySelectorAll('.task-item').forEach(t => t.classList.remove('active'));
+                    btn.classList.add('active');
+                    });
+                    tasksList.appendChild(btn);
+                    num++;
+                }
+            });
+            tasks.forEach((task, index) => {
+                if (task.category !== "crypto") {
+                    return;
+                }
+                if (task.difficulty == "hard") {
+                    const btn = document.createElement('div');
+                    btn.className = 'task-item';
+                    btn.textContent = num;
+                    btn.addEventListener('click', () => {
+                    showTask(index);
+                    document.querySelectorAll('.task-item').forEach(t => t.classList.remove('active'));
+                    btn.classList.add('active');
+                    });
+                    tasksList.appendChild(btn);
+                    num++;
+                }
+            });
+            
+            if (tasks.length > 0) {
+                let index = 0;
+                for (task of tasks) {
+                    if (task.category === "crypto") { break; }
+                    index++;
+                }
+                showTask(index);
+                const firstBtn = tasksList.querySelector('.task-item');
+                if (firstBtn) firstBtn.classList.add('active');
+            }
+            
+        } else {
+            tasksList.innerHTML = '<div class="error">Нет доступных задач</div>';
+        }
+    }
+    
 
     function showTask(index){
         const task = tasks[index];
         const details = document.getElementById('taskDetails');
         details.querySelector('.task-title').textContent = task.title;
-        details.querySelector('.task-desc').textContent = task.desc;
+        details.querySelector('.task-desc').textContent = task.description;
 
         const lettersContainer = document.getElementById('lettersContainer');
         lettersContainer.innerHTML='';
-        task.letters.forEach(l=>{
-            const div = document.createElement('div');
-            div.className='letter';
-            div.textContent = l;
-            lettersContainer.appendChild(div);
-        });
+        if (task.difficulty == "easy") {
+            for (let l of "EASY") {
+                const div = document.createElement('div');
+                div.className='letter';
+                div.textContent = l;
+                lettersContainer.appendChild(div);
+            }
+        } else if (task.difficulty == "medium") {
+            for (let l of "MEDIUM") {
+                const div = document.createElement('div');
+                div.className='letter';
+                div.textContent = l;
+                lettersContainer.appendChild(div);
+            }
+        } else {
+                for (let l of "HARD") {
+                const div = document.createElement('div');
+                div.className='letter';
+                div.textContent = l;
+                lettersContainer.appendChild(div);
+            }
+        }
     }
+
+    let lastData = JSON.parse(localStorage.getItem("lastData")) || null;
+
+    function isDataEqual(obj1, obj2) {
+        return JSON.stringify(obj1) === JSON.stringify(obj2);
+    }
+
+    async function checkForUpdates() {
+        try {
+            const response = await fetch(`${apiBaseUrl}/taskspwn/available`);
+            const currentData = await response.json();
+
+            if (!isDataEqual(lastData, currentData)) {
+                lastData = currentData;
+                localStorage.setItem("lastData", JSON.stringify(currentData));
+                location.reload();
+            }
+        } catch (error) {
+            console.error("Ошибка при проверке обновлений:", error);
+        }
+    }
+
+    // Проверяем каждые 5 секунд
+    setInterval(checkForUpdates, 10000);
+
+
+    document.addEventListener('DOMContentLoaded', init);
 </script>
 
 </body>

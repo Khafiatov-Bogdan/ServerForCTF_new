@@ -254,6 +254,9 @@
                 }
             });
             tasks.forEach((task, index) => {
+                if (task.category !== "pwn") {
+                    return;
+                }
                 if (task.difficulty == "medium") {
                     const btn = document.createElement('div');
                     btn.className = 'task-item';
