@@ -206,18 +206,25 @@
     <!-- Правая колонка с деталями -->
     <div class="task-details" id="taskDetails">
         <div class="task-title" id="taskTitle">Выберите задание</div>
-        <div class="task-desc">Описание задания появится здесь</div>
+        <div class="task-desc" style="white-space: pre-line;">Описание задания появится здесь</div>
         <div class="letters" id="lettersContainer"></div>
         <div class="answer-section">
             <input type="text" class="answer-input" id="answerInput" placeholder="Введите ответ">
             <button class="submit-btn" id="submitBtn">Ответ</button>
         </div>
+        <br>
+        <div class="answer-section">
+            <input type="text" class="answer-input" placeholder="Введите команду для бинарного файла" id="execCommand">
+            <button id="execButton" class="submit-btn">Выполнить</button>
+        </div>
+        <div id="result"></div>
     </div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
 <script src="/js/loadPWNtasks.js"></script>
 <script src="/js/postPWNtasks.js"></script>
+<script src="/js/runBinary.js"></script>
 
 
 <script>
@@ -230,6 +237,9 @@
         
         if (tasks && tasks.length > 0) {
             tasks.forEach((task, index) => {
+                if (task.category != "pwn") {
+                    return;
+                }
                 if (task.difficulty == "easy") {
                     const btn = document.createElement('div');
                     btn.className = 'task-item';
@@ -263,6 +273,7 @@
                 const firstBtn = tasksList.querySelector('.task-item');
                 if (firstBtn) firstBtn.classList.add('active');
             }
+            
         } else {
             tasksList.innerHTML = '<div class="error">Нет доступных задач</div>';
         }
@@ -279,21 +290,45 @@
         lettersContainer.innerHTML='';
         if (task.difficulty == "easy") {
             for (let l of "EASY") {
-            const div = document.createElement('div');
-            div.className='letter';
-            div.textContent = l;
-            lettersContainer.appendChild(div);
+                const div = document.createElement('div');
+                div.className='letter';
+                div.textContent = l;
+                lettersContainer.appendChild(div);
             }
         } else {
             for (let l of "MEDIUM") {
-            const div = document.createElement('div');
-            div.className='letter';
-            div.textContent = l;
-            lettersContainer.appendChild(div);
+                const div = document.createElement('div');
+                div.className='letter';
+                div.textContent = l;
+                lettersContainer.appendChild(div);
             }
         }
-
     }
+
+    let lastData = JSON.parse(localStorage.getItem("lastData")) || null;
+
+    function isDataEqual(obj1, obj2) {
+        return JSON.stringify(obj1) === JSON.stringify(obj2);
+    }
+
+    async function checkForUpdates() {
+        try {
+            const response = await fetch(`${apiBaseUrl}/taskspwn/available`);
+            const currentData = await response.json();
+
+            if (!isDataEqual(lastData, currentData)) {
+                lastData = currentData;
+                localStorage.setItem("lastData", JSON.stringify(currentData));
+                location.reload();
+            }
+        } catch (error) {
+            console.error("Ошибка при проверке обновлений:", error);
+        }
+    }
+
+    // Проверяем каждые 5 секунд
+    setInterval(checkForUpdates, 10000);
+
 
     document.addEventListener('DOMContentLoaded', init);
 </script>

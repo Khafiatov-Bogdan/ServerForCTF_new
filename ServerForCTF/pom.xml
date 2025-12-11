@@ -24,6 +24,13 @@
 
     <dependencies>
 
+        <dependency>  
+            <groupId>org.projectlombok</groupId>  
+            <artifactId>lombok</artifactId>  
+            <version>1.18.32</version>  
+            <scope>provided</scope>
+        </dependency>  
+
         <!-- JACKSON -->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>

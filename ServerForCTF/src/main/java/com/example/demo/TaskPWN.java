@@ -31,15 +31,19 @@ public class TaskPWN {
     @Column(name = "flag", nullable = false)
     private String flag;
 
+    @Column(name = "binary_name", nullable = false)
+    private String binary;
+
     public TaskPWN() {}
 
-    public TaskPWN(String category, String description, String title, int points, String difficulty, String flag) {
+    public TaskPWN(String category, String description, String title, int points, String difficulty, String flag, String binary) {
         this.category = category;
         this.description = description;
         this.title = title;
         this.points = points;
         this.difficulty = difficulty;
         this.flag = flag;
+        this.binary = binary;
     }
 
     public Long getId() { return id; }
@@ -48,6 +52,7 @@ public class TaskPWN {
     public String getTitle() { return title; }
     public String getDifficulty() { return difficulty; }
     public String getFlag() { return flag; }
+    public String getBinary() { return binary; }
 
     public void setTitle(String title) { this.title = title; }
 
@@ -62,6 +67,8 @@ public class TaskPWN {
 
     public void setFlag(String flag) { this.flag = flag; }
 
+    public void setBinary(String binary) { this.binary = binary; }
+
     public int getPoints() { return points; }
     public void setPoints(int points) { this.points = points; }
 
@@ -73,6 +80,7 @@ public class TaskPWN {
                 ", category=" + category + '\'' +
                 ", solved=" + solved + '\'' +
                 ", points=" + points + '\'' +
+                ", binary=" + binary + '\'' +
                 '}';
     }
 }

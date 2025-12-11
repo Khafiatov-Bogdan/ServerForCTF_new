@@ -24,18 +24,9 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/ctf
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: Mygiv@ra999
-      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_JPA_HIBERNATE_DDL_AUTO: create
     ports:
       - "8081:8080"  # локально backend на http://localhost:8081
-    networks:
-      - appnet
-    restart: unless-stopped
-  
-  pwnprogs:
-    build: ./ServerForCTF/pwnbinaries
-    container_name: python-c
-    ports:
-      - "5000:5000"
     networks:
       - appnet
     restart: unless-stopped

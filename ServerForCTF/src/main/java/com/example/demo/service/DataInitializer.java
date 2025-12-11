@@ -6,6 +6,9 @@ import org.springframework.stereotype.Component;
 import com.example.demo.service.UsersService;
 import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import jakarta.transaction.Transactional;
+
 import com.example.demo.service.PromoService;
 import com.example.demo.Task;
 import com.example.demo.service.TaskService;
@@ -58,6 +61,7 @@ public class DataInitializer implements CommandLineRunner  {
     }
 
     @Override
+    @Transactional
     public void run(String... args) throws StreamReadException, DatabindException, IOException {
 
         // --- Пользователи ---

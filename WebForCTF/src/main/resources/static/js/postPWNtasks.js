@@ -5,12 +5,15 @@ const flagInput = document.getElementById("answerInput");
 submitBtn.addEventListener('click', async function () {
     const flagValue = flagInput.value;
     const title = taskTitle.textContent;
+    isSolved = false;
     console.log(title);
     hash = CryptoJS.SHA256(flagValue).toString();
     tasks = await loadTasks();
     for (task of tasks) {
         if (task.flag == hash) {
+            isSolved = true;
             console.log("Флаг введён верно");
+            window.alert("Флаг введён верно!")
             try {
                 const response = await fetch(`${apiBaseUrl}/taskspwn/${title}/solve`, {
                     method: 'POST',
@@ -24,6 +27,8 @@ submitBtn.addEventListener('click', async function () {
             }
         }
     }
+    if (!isSolved) { window.alert("Флаг неверный"); }
+    isSolved = false;
 });
 
 // Начисление очков пользователю

@@ -2,181 +2,201 @@
     {
         "category": "pwn",
         "title": "pwn_strings_basic",
-        "description": "Вам дан бинарный файл challenge.\nФлаг спрятан внутри строки в исполняемом файле.\nНикакого запуска не требуется — просто извлеките строку.",
+        "description": "Вам дан бинарный файл challenge.\nФлаг спрятан внутри строки в исполняемом файле.\nНикакого запуска не требуется — просто извлеките строку.\n\nБаллов: 2",
         "solved": false,
         "points": 2,
         "difficulty": "easy",
-        "flag": "CTF{str1ngs_aRe_p0werful}"
+        "flag": "CTF{str1ngs_aRe_p0werful}",
+        "binary": "challenge"
     },
     {
         "category": "pwn",
         "title": "pwn_wrong_password",
-        "description": "Простая программа сравнивает ввод со строкой, флаг лежит в этой строке.\nВ бинаре login есть строка с правильным паролем.\nНайдите её с помощью strings или r2.",
+        "description": "Простая программа сравнивает ввод со строкой, флаг лежит в этой строке.\nВ бинаре login есть строка с правильным паролем.\nНайдите её с помощью strings или r2.\n\nБаллов: 2",
         "solved": false,
         "points": 2,
         "difficulty": "easy",
-        "flag": "CTF{sUper_secrEt_pwd}"
+        "flag": "CTF{sUper_secrEt_pwd}",
+        "binary": "bin_2"
     },
     {
         "category": "pwn",
         "title": "pwn_find_flag_in_rodata",
-        "description": "Флаг находится в секции .rodata.\nНайдите флаг, спрятанный в .rodata бинаря ro.exe.",
+        "description": "Флаг находится в секции .rodata.\nНайдите флаг, спрятанный в .rodata бинаря ro.exe.\n\nБаллов: 2",
         "solved": false,
         "points": 2,
         "difficulty": "easy",
-        "flag": "CTF{rodata_reveals_all}"
+        "flag": "CTF{rodata_reveals_all}",
+        "binary": "bin_3"
     },
     {
         "category": "pwn",
         "title": "pwn_simple_overflow_static",
-        "description": "Вам дана программа, в которой можно переполнить ввод и получить скрытое сообщение.\nПодайте более 32 символов.",
+        "description": "Вам дана программа, в которой можно переполнить ввод и получить скрытое сообщение.\nПодайте более 32 символов.\n\nБаллов: 3",
         "solved": false,
         "points": 3,
         "difficulty": "easy",
-        "flag": "CTF{overflow_detected}"
+        "flag": "CTF{overflow_detected}",
+        "binary": "bin_4"
     },
     {
         "category": "pwn",
         "title": "pwn_compare_hidden",
-        "description": "Если ввести строку «admin», программа печатает флаг.\nНо строка не документирована.\nИзучите бинарь check. При каком вводе программа раскрывает флаг?",
+        "description": "Если ввести строку «admin», программа печатает флаг.\nНо строка не документирована.\nИзучите бинарь check. При каком вводе программа раскрывает флаг?\n\nБаллов: 2",
         "solved": false,
         "points": 2,
         "difficulty": "easy",
-        "flag": "CTF{admin_access_granted}"
+        "flag": "CTF{admin_access_granted}",
+        "binary": "bin_5"
     },
     {
         "category": "pwn",
         "title": "pwn_env_variable_flag",
-        "description": "Программа читает переменную FLAG_VAR.\nНайдите флаг в бинаре.",
+        "description": "Программа читает переменную FLAG_VAR.\nНайдите флаг в бинаре.\n\nБаллов: 2",
         "solved": false,
         "points": 2,
         "difficulty": "easy",
-        "flag": "CTF{environment_matters}"
+        "flag": "CTF{environment_matters}",
+        "binary": "bin_6"
     },
     {
         "category": "pwn",
         "title": "pwn_md5_check_fake",
-        "description": "В бинаре есть строка, которая хешируется MD5. Найдите её.",
+        "description": "В бинаре есть строка, которая хешируется MD5. Найдите её.\n\nБаллов: 3",
         "solved": false,
         "points": 3,
         "difficulty": "easy",
-        "flag": "CTF{md5_input_string}"
+        "flag": "CTF{md5_input_string}",
+        "binary": "bin_7"
     },
     {
         "category": "pwn",
         "title": "pwn_basic_disasm_flag",
-        "description": "Флаг зашит в mov-инструкцию: mov rdi, offset flag_string. Откройте бинарь в radare2 и найдите строку флага.",
+        "description": "Флаг зашит в mov-инструкцию: mov rdi, offset flag_string.\nОткройте бинарь в radare2 и найдите строку флага.\n\nБаллов: 2",
         "solved": false,
         "points": 2,
         "difficulty": "easy",
-        "flag": "CTF{disassembly_never_lies}"
+        "flag": "CTF{disassembly_never_lies}",
+        "binary": "bin_8"
     },
     {
         "category": "pwn",
         "title": "pwn_check_password_len",
-        "description": "Функция проверяет, что длина строки == 8. Найдите, какой пароль должен быть введён (он хранится в бинаре).",
+        "description": "Функция проверяет, что длина строки == 8.\nНайдите, какой пароль должен быть введён (он хранится в бинаре).\n\nБаллов: 2",
         "solved": false,
         "points": 2,
         "difficulty": "easy",
-        "flag": "CTF{len_eq_8}"
+        "flag": "CTF{len_eq_8}",
+        "binary": "bin_9"
     },
     {
         "category": "pwn",
         "title": "pwn_format_string_leak_easy",
-        "description": "В бинаре есть printf(input); — форматная строка. Флаг хранится в стеке. Получите флаг, используя %x-формат.",
+        "description": "В бинаре есть printf(input); — форматная строка.\nФлаг хранится в стеке. Получите флаг, используя %x-формат.\n\nБаллов: 3",
         "solved": false,
         "points": 3,
         "difficulty": "easy",
-        "flag": "CTF{stack_leak_success}"
+        "flag": "CTF{stack_leak_success}",
+        "binary": "bin_10"
     },
     {
         "category": "pwn",
         "title": "pwn_ret2win_basic",
-        "description": "Найдите оффсет EIP/RIP и перепишите адрес возврата на функцию win.",
+        "description": "Найдите оффсет EIP/RIP и перепишите адрес возврата на функцию win.\n\nБаллов: 6",
         "solved": false,
         "points": 6,
         "difficulty": "medium",
-        "flag": "CTF{ret2win_master}"
+        "flag": "CTF{ret2win_master}",
+        "binary": "bin_11"
     },
     {
         "category": "pwn",
         "title": "pwn_buffer_leak_canary",
-        "description": "Используйте уязвимость форматных строк (printf(input)), чтобы узнать защитное значение canary.\nФлаг — это значение canary.",
+        "description": "Используйте уязвимость форматных строк (printf(input)), чтобы узнать защитное значение canary.\nФлаг — это значение canary.\n\nБаллов: 7",
         "solved": false,
         "points": 7,
         "difficulty": "medium",
-        "flag": "CTF{00ffd2a3}"
+        "flag": "CTF{00ffd2a3}",
+        "binary": "bin_12"
     },
     {
         "category": "pwn",
         "title": "pwn_heap_uaf_intro",
-        "description": "При освобождении объекта его содержимое остаётся в памяти. Используйте это, чтобы прочитать флаг.",
+        "description": "При освобождении объекта его содержимое остаётся в памяти. Используйте это, чтобы прочитать флаг.\n\nБаллов: 6",
         "solved": false,
         "points": 6,
         "difficulty": "medium",
-        "flag": "CTF{use_after_free_done}"
+        "flag": "CTF{use_after_free_done}",
+        "binary": "bin_13"
     },
     {
         "category": "pwn",
         "title": "pwn_partial_overwrite",
-        "description": "Переполнение позволяет перезаписать только младший байт адреса возврата. Вам нужно подменить только последний байт RIP на адрес, ведущий в win.",
+        "description": "Переполнение позволяет перезаписать только младший байт адреса возврата.\nВам нужно подменить только последний байт RIP на адрес, ведущий в win.\n\nБаллов: 7",
         "solved": false,
         "points": 7,
         "difficulty": "medium",
-        "flag": "CTF{partial_win_achieved}"
+        "flag": "CTF{partial_win_achieved}",
+        "binary": "bin_14"
     },
     {
         "category": "pwn",
         "title": "pwn_plt_got_leak",
-        "description": "Утеките адрес функции puts через GOT. Флаг — это утёкший адрес функции.",
+        "description": "Утеките адрес функции puts через GOT. Флаг — это утёкший адрес функции.\n\nБаллов: 6",
         "solved": false,
         "points": 6,
         "difficulty": "medium",
-        "flag": "CTF{0x7ffff7a5d690}"
+        "flag": "CTF{0x7ffff7a5d690}",
+        "binary": "bin_15"
     },
     {
         "category": "pwn",
         "title": "pwn_shellcode_injection_easy",
-        "description": "NX отключён, нужно залить обычный /bin/sh шеллкод. Загрузите в программу шеллкод и получите флаг.",
+        "description": "NX отключён, нужно залить обычный /bin/sh шеллкод.\nЗагрузите в программу шеллкод и получите флаг.\n\nБаллов: 7",
         "solved": false,
         "points": 7,
         "difficulty": "medium",
-        "flag": "CTF{shell_spawned_successfully}"
+        "flag": "CTF{shell_spawned_successfully}",
+        "binary": "bin_16"
     },
     {
         "category": "pwn",
         "title": "pwn_stack_cookie_bypass",
-        "description": "Утеките значение stack canary через format-string и выполните overflow корректно.",
+        "description": "Утеките значение stack canary через format-string и выполните overflow корректно.\n\nБаллов: 7",
         "solved": false,
         "points": 7,
         "difficulty": "medium",
-        "flag": "CTF{0x00a1b2c3}"
+        "flag": "CTF{0x00a1b2c3}",
+        "binary": "bin_17"
     },
     {
         "category": "pwn",
         "title": "pwn_double_free_intro",
-        "description": "Найдите способ двойного освобождения объекта и извлеките флаг, хранящийся в освобождённом чанке.",
+        "description": "Найдите способ двойного освобождения объекта и извлеките флаг, хранящийся в освобождённом чанке.\n\nБаллов: 6",
         "solved": false,
         "points": 6,
         "difficulty": "medium",
-        "flag": "CTF{double_free_won}"
+        "flag": "CTF{double_free_won}",
+        "binary": "bin_18"
     },
     {
         "category": "pwn",
         "title": "pwn_ret2libc_basic",
-        "description": "Утеките адрес puts в libc, вычислите адрес system и /bin/sh, получите флаг.",
+        "description": "Утеките адрес puts в libc, вычислите адрес system и /bin/sh, получите флаг.\n\nБаллов: 8",
         "solved": false,
         "points": 8,
         "difficulty": "medium",
-        "flag": "CTF{ret2libc_complete}"
+        "flag": "CTF{ret2libc_complete}",
+        "binary": "bin_19"
     },
     {
         "category": "pwn",
         "title": "pwn_rop_chain_basic",
-        "description": "Используя ROP-гаджеты, вызовите system(\"/bin/sh\"). Флаг печатается автоматически.",
+        "description": "Используя ROP-гаджеты, вызовите system(\"/bin/sh\"). Флаг печатается автоматически.\n\nБаллов: 8",
         "solved": false,
         "points": 8,
         "difficulty": "medium",
-        "flag": "CTF{rop_chain_executed}"
+        "flag": "CTF{rop_chain_executed}",
+        "binary": "bin_20"
     }
 ]
