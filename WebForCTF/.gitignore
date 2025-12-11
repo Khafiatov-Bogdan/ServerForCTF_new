@@ -24,10 +24,15 @@ target/
 /nbbuild/
 /dist/
 /nbdist/
-/.nb-gradle/
+/nb-gradle/
 build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
 ### VS Code ###
 .vscode/
+
+# ===== Added for security =====
+# Environment variables (DB passwords, tokens, API keys, etc.)
+.env
+*.env

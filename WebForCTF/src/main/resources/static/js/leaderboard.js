@@ -109,9 +109,14 @@ function generateFullLeaderboard() {
             }
 
             users.forEach((user, index) => {
-                const login = user.name ?? 'Unknown';  // <- здесь change
+                const login = user.name ?? 'Unknown';
                 const points = user.points ?? 0;
                 const labPoints = user.pointsLab ?? 0;
+
+                // Karlapingus получает tooltip
+                const nameHtml = login === 'Karlapingus'
+                    ? `<div class="leader-name tooltip" data-tip="ПодарОчек: MINUS200">${login}</div>`
+                    : `<div class="leader-name">${login}</div>`;
 
                 const leaderItem = document.createElement('div');
                 leaderItem.className = 'leader-item';
@@ -120,14 +125,16 @@ function generateFullLeaderboard() {
                 leaderItem.innerHTML = `
                     <div class="leader-rank">${index + 1}</div>
                     <div class="leader-info">
-                        <div class="leader-name">${login}</div>
+                        ${nameHtml}
                         <div class="leader-stats">
                             Points: ${points} | Lab Points: ${labPoints}
                         </div>
                     </div>
                 `;
+
                 fullList.appendChild(leaderItem);
             });
+
         })
         .catch(err => {
             console.error('Ошибка при загрузке полного списка:', err);
