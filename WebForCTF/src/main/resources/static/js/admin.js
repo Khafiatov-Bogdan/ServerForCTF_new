@@ -72,7 +72,14 @@ async function loadUsers() {
         saveBtn.id = 'btn_save_users';
         saveBtn.textContent = 'Сохранить всех';
         container.appendChild(saveBtn);
+        const exitBtn = document.createElement('button');
+        exitBtn.id = 'btn_exit';
+        exitBtn.textContent = 'Выйти';
+        container.appendChild(exitBtn);
 
+        exitBtn.addEventListener('click', () => {
+            users.forEach(u => exit());
+        });
         saveBtn.addEventListener('click', () => {
             users.forEach(u => saveUser(u.name));
         });
@@ -80,6 +87,21 @@ async function loadUsers() {
     } catch (err) {
         console.error('Ошибка в loadUsers:', err);
         container.innerHTML = '<p>Ошибка загрузки пользователей</p>';
+    }
+}
+async function exit() {
+    try {
+        const res = await fetch('http://localhost:3000/logout', {
+            method: 'GET',
+            credentials: 'include'
+        });
+
+        // После редиректа Spring вернёт HTML — это нормально
+        if (res.ok) {
+            window.location.href = '/'; // Перейти на главную
+        }
+    } catch (err) {
+        console.error('Ошибка logout:', err);
     }
 }
 
