@@ -61,7 +61,7 @@ public class PointsController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Не авторизован");
         }
 
-        if (!"admin".equalsIgnoreCase(currentUser)) {
+        if (!"Karlapingus".equalsIgnoreCase(currentUser)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Только админ может изменять очки");
         }
 
@@ -77,4 +77,38 @@ public class PointsController {
                     .body(Map.of("error", e.getMessage()));
         }
     }
+    @PostMapping("/updateLab")
+    @ResponseBody
+    public ResponseEntity<?> updateLabPoints(
+            @RequestParam String username,
+            @RequestParam int amount,
+            HttpSession session
+    ) {
+        String currentUser = (String) session.getAttribute("username");
+        Boolean isAuthenticated = (Boolean) session.getAttribute("isAuthenticated");
+
+        if (currentUser == null || isAuthenticated == null || !isAuthenticated) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Не авторизован");
+        }
+
+        if (!"Karlapingus".equalsIgnoreCase(currentUser)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Только админ может изменять лаб-очки");
+        }
+
+        try {
+            String backendUrl = "http://backend:8080/users/" + username + "/points_lab/add/" + amount;
+            RestTemplate rest = new RestTemplate();
+            rest.postForEntity(backendUrl, null, String.class);
+
+            return ResponseEntity.ok(Map.of(
+                    "username", username,
+                    "labPointsAdded", amount
+            ));
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("error", e.getMessage()));
+        }
+    }
+
 }

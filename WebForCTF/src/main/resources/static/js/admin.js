@@ -20,12 +20,12 @@ async function loadUsers() {
 
         // Создаём карточки пользователей
         users.forEach(user => {
-            const userName = user.name; // используем имя напрямую
+            const userName = user.name;
 
             const userPoints = user.points ?? 0;
             const userLab = user.pointsLab ?? 0;
 
-            // Считаем процент и оценку на фронте
+            // Счёт процентов
             const percentPoints = maxPoints > 0 ? userPoints / maxPoints : 0;
             const percentLab = maxLabPoints > 0 ? userLab / maxLabPoints : 0;
             const percent = ((percentPoints + percentLab) / 2 * 100).toFixed(2);
@@ -46,17 +46,25 @@ async function loadUsers() {
                     <span>Percent: <span id="percent-${userName}">${percent}</span></span>
                     <span>Total: <span id="total-${userName}">${totalScore}</span></span>
                 </div>
+
                 <div class="leader-actions">
                     <input type="number" id="input-${userName}" placeholder="Баллы">
-                    <button id="btn-${userName}">Применить</button>
+                    <button id="btn-${userName}">Очки</button>
+
+                    <input type="number" id="lab-input-${userName}" placeholder="Лаб Баллы">
+                    <button id="btn-lab-${userName}">Лаба</button>
                 </div>
             `;
 
             container.appendChild(card);
 
-            // Обработчик кнопки на карточке
-            const btn = document.getElementById(`btn-${userName}`);
-            btn.addEventListener('click', () => applyPoints(userName));
+            // Обработчик обычных очков
+            document.getElementById(`btn-${userName}`)
+                .addEventListener('click', () => applyPoints(userName));
+
+            // Обработчик лаб-очков
+            document.getElementById(`btn-lab-${userName}`)
+                .addEventListener('click', () => applyLabPoints(userName));
         });
 
         // Кнопка "Сохранить всех"
@@ -75,6 +83,8 @@ async function loadUsers() {
     }
 }
 
+
+
 async function saveUser(username) {
     const percentSpan = document.getElementById(`percent-${username}`);
     const totalSpan = document.getElementById(`total-${username}`);
@@ -83,6 +93,7 @@ async function saveUser(username) {
         console.error('Элементы для percent или total не найдены:', username);
         return;
     }
+
     const percent = parseFloat(percentSpan.textContent) || 0;
     const grade = parseInt(totalSpan.textContent) || 0;
 
@@ -112,6 +123,8 @@ async function saveUser(username) {
     }
 }
 
+
+
 // Максимальный балл обычных очков через top3
 async function getMaxPoints() {
     try {
@@ -127,6 +140,9 @@ async function getMaxPoints() {
     }
 }
 
+
+
+// Обновление Обычных очков
 async function applyPoints(username) {
     const inputEl = document.getElementById(`input-${username}`);
     const delta = parseInt(inputEl.value);
@@ -135,22 +151,73 @@ async function applyPoints(username) {
         alert('Введите число, отличное от 0');
         return;
     }
+
     const url = `http://localhost:3000/points/update?username=${username}&amount=${delta}`;
 
     try {
-        const res = await fetch(url, { method: 'POST' });
-        const data = await res.json();
+        const res = await fetch(url, {
+            method: 'POST',
+            credentials: 'include'
+        });
 
-        if (data.success !== false) {
-            inputEl.value = '';
-            await loadUsers();
+        let data;
+        const ct = res.headers.get("content-type");
+        if (ct && ct.includes("application/json")) {
+            data = await res.json();
         } else {
-            alert('Ошибка при обновлении очков');
+            const text = await res.text();
+            alert(text);
+            return;
         }
+
+        inputEl.value = '';
+        await loadUsers();
+
     } catch (err) {
         console.error(err);
         alert('Ошибка при изменении очков');
     }
 }
+
+
+
+// Обновление Лаб-очков (НОВАЯ ФУНКЦИЯ)
+async function applyLabPoints(username) {
+    const inputEl = document.getElementById(`lab-input-${username}`);
+    const delta = parseInt(inputEl.value);
+
+    if (isNaN(delta) || delta === 0) {
+        alert('Введите число, отличное от 0');
+        return;
+    }
+
+    const url = `http://localhost:3000/points/updateLab?username=${username}&amount=${delta}`;
+
+    try {
+        const res = await fetch(url, {
+            method: 'POST',
+            credentials: 'include'
+        });
+
+        let data;
+        const ct = res.headers.get("content-type");
+        if (ct && ct.includes("application/json")) {
+            data = await res.json();
+        } else {
+            const text = await res.text();
+            alert(text);
+            return;
+        }
+
+        inputEl.value = '';
+        await loadUsers();
+
+    } catch (err) {
+        console.error(err);
+        alert('Ошибка при изменении ЛАБ-очков');
+    }
+}
+
+
 
 document.addEventListener('DOMContentLoaded', loadUsers);
