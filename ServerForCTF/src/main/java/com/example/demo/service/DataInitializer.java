@@ -172,10 +172,10 @@ public class DataInitializer implements CommandLineRunner  {
                 {"POMOGITE10", "9"},//1
                 {"POMOGITE15", "16"},//1
                 {"POMOGITE20", "19"},//1
-                {"Nikita5", "5"},//1
-                {"Nikita9", "9"},//1
-                {"Nikita16", "16"},//1
-                {"Nikita19", "19"},//1
+                {"SPARKI5", "5"},//1
+                {"SPARKI9", "9"},//1
+                {"SPARKI16", "16"},//1
+                {"SPARKI19", "19"},//1
                 {"OPANA", "5"}//1
 
         };
